@@ -841,7 +841,7 @@ function readinessAdvice(r){
 }
 
 /* ================= NAV ================= */
-function go(screen,arg){ paintHeader(); ({home:homeScreen,topics:topicsScreen,flashpick:flashPickScreen,progress:progressScreen,badges:badgesScreen})[screen](arg); window.scrollTo(0,0);}
+function go(screen,arg){ paintHeader(); ({home:homeScreen,topics:topicsScreen,flashpick:flashPickScreen,stories:storyPickScreen,progress:progressScreen,badges:badgesScreen})[screen](arg); window.scrollTo(0,0);}
 
 /* ================= HOME ================= */
 function homeScreen(){
@@ -858,6 +858,7 @@ function homeScreen(){
     <button class="mtile" onclick="startPractice('all')"><span class="ic">${SVG.society}</span><span><b>⚡ Quick Practice</b><span>10 mixed questions, instant feedback</span></span></button>
     <button class="mtile" onclick="go('topics')"><span class="ic">${SVG.history}</span><span><b>📚 Practice by Topic</b><span>Target your weak areas</span></span></button>
     <button class="mtile" onclick="go('flashpick')"><span class="ic">${SVG.values}</span><span><b>🧠 Mnemonic Flashcards</b><span>Memorise dates &amp; names fast</span></span></button>
+    <button class="mtile" onclick="go('stories')"><span class="ic">${SVG.history}</span><span><b>📖 Story School</b><span>Remember lists via funny stories, then a quiz</span></span></button>
     <button class="mtile" onclick="startExam()"><span class="ic">${SVG.government}</span><span><b>🎓 Mock Exam</b><span>24 questions · 45 min · pass = 18</span></span></button>
     <button class="mtile" onclick="go('progress')"><span class="ic">${SVG.uk}</span><span><b>📊 Progress &amp; Readiness</b><span>Am I ready for the real test?</span></span></button>
     <button class="mtile" onclick="go('badges')"><span class="ic">${SVG.mascot}</span><span><b>🏆 Badges</b><span>${Object.keys(S.badges).length}/${BADGES.length} unlocked</span></span></button>
@@ -1103,11 +1104,171 @@ function badgesScreen(){
    <div class="row"><button class="btn ghost small" onclick="go('home')">← Back</button></div></div>`;
 }
 
+/* ================= STORY SCHOOL ================= */
+const STORIES=[
+ {
+  id:"inventors", title:"Great British Inventors", emoji:"💡",
+  blurb:"Chain each person to their invention with 4 tiny air-show & lab scenes. Say the hooks out loud.",
+  groups:[
+    {name:"1. Machines in the sky ✈️",
+     intro:"Imagine you're watching a crazy air-show.",
+     hook:"Baird Whittled a Hovering Concorde Harrier",
+     items:[
+       {who:"John Logie Baird", what:"Television", note:"you watch the show on TV"},
+       {who:"Frank Whittle", what:"the Jet engine", note:"powers the planes"},
+       {who:"Christopher Cockerell", what:"the Hovercraft", note:"hovering over the runway"}
+     ],
+     also:"Two famous British-built aircraft finish the scene: Concorde (supersonic airliner) and the Harrier (vertical take-off 'jump jet').",
+     picture:"Picture a TV screen showing a jet with a big 'WHITTLE' label on the engine, a hovercraft sliding across the runway, Concorde zooming past, and a Harrier taking off straight up."},
+    {name:"2. Invisible 'seeing' & signals 📡",
+     intro:"Think 'super eyes and super brain'.",
+     hook:"Watson saw planes, Lovell watched space, Turing thought like a computer",
+     items:[
+       {who:"Robert Watson-Watt", what:"Radar", note:"saw planes coming"},
+       {who:"Bernard Lovell", what:"the Jodrell Bank radio telescope", note:"watched space"},
+       {who:"Alan Turing", what:"the Turing machine / modern computing", note:"thought like a computer"}
+     ],
+     picture:"Imagine Watson with a radar screen, Lovell with a giant dish pointed at the stars, and Turing with a glowing computer brain."},
+    {name:"3. Medicine & the body 🧬",
+     intro:"Say the phrase in order: 'Mac, DNA, MRI, IVF, Dolly'.",
+     hook:"Mac, DNA, MRI, IVF, Dolly",
+     items:[
+       {who:"John MacLeod", what:"Insulin (for diabetes)", note:"'Mac' injects insulin"},
+       {who:"Francis Crick", what:"the structure of DNA", note:"the double helix floats above him"},
+       {who:"Peter Mansfield", what:"the MRI scanner", note:"the body-scanner tube"},
+       {who:"Edwards & Steptoe", what:"IVF (the test-tube baby)", note:"IVF creates a baby"},
+       {who:"Wilmut & Campbell", what:"Dolly the sheep (cloning)", note:"the 'clone twin' appears"}
+     ],
+     picture:"A diabetic 'Mac' injects insulin, his DNA double helix floats above him, he slides into an MRI tube, IVF creates a baby, and finally Dolly the sheep appears as his clone twin."},
+    {name:"4. Everyday life + the Web 💷",
+     intro:"Think 'cash, web, world'.",
+     hook:"Good fellow gives cash, Berners-Lee gives web",
+     items:[
+       {who:"James Goodfellow", what:"the ATM / cashpoint (and PIN)", note:"a good fellow hands you money from a wall"},
+       {who:"Tim Berners-Lee", what:"the World Wide Web", note:"then you go home and use the web"}
+     ],
+     picture:"Picture a 'good fellow' handing you money from a wall, then you go home and check your bank on the web from Berners-Lee."}
+  ]
+ },
+ {
+  id:"dates", title:"Big-Dates Time Machine", emoji:"⏳",
+  blurb:"Chant your way through the dates people fail on. One rhyme per stop.",
+  groups:[
+    {name:"The rhyming timeline 🕰️",
+     intro:"Step into the time machine and shout each date as you land.",
+     hook:"66 · 15 · 88 · 05 · 66 · 88 · 07",
+     items:[
+       {who:"1066", what:"Battle of Hastings", note:"Ten-sixty-six, William's in the mix"},
+       {who:"1215", what:"Magna Carta", note:"Twelve-fifteen, the king is reined in"},
+       {who:"1588", what:"Spanish Armada defeated", note:"Fifteen eighty-eight, Armada meets its fate"},
+       {who:"1605", what:"Gunpowder Plot", note:"Remember, remember the 5th of November"},
+       {who:"1666", what:"Great Fire of London", note:"Sixteen sixty-six, London's in a fix"},
+       {who:"1688", what:"Glorious Revolution", note:"William oranges out James"},
+       {who:"1707", what:"Act of Union (Great Britain)", note:"Seventeen-oh-seven, England+Scotland in heaven"}
+     ],
+     picture:"Picture the time-machine dial spinning past: an arrow (1066), a scroll (1215), a sinking ship (1588), fireworks (1605), a blazing city (1666), an orange king (1688), two flags stitched together (1707)."}
+  ],
+  quiz:[
+    {q:"Which year was the Battle of Hastings?",opts:["1066","1215","1588","1666"],answer:0,hook:"'Ten-sixty-six, William's in the mix.'"},
+    {q:"Magna Carta was sealed in…",opts:["1066","1215","1348","1605"],answer:1,hook:"'Twelve-fifteen, the king is reined in.'"},
+    {q:"The Spanish Armada was defeated in…",opts:["1588","1605","1707","1815"],answer:0,hook:"'Fifteen eighty-eight, Armada meets its fate.'"},
+    {q:"The Gunpowder Plot was in…",opts:["1666","1605","1688","1707"],answer:1,hook:"'Remember, remember the 5th of November' — 1605."},
+    {q:"The Great Fire of London was in…",opts:["1666","1588","1649","1707"],answer:0,hook:"'Sixteen sixty-six, London's in a fix.'"},
+    {q:"The Glorious Revolution happened in…",opts:["1688","1707","1215","1801"],answer:0,hook:"'William oranges out James' — 1688."},
+    {q:"The Act of Union creating Great Britain was in…",opts:["1707","1801","1603","1066"],answer:0,hook:"'Seventeen-oh-seven, England+Scotland in heaven.'"}
+  ]
+ }
+];
+
+let story=null;
+function storyPickScreen(){
+  app.innerHTML=`<div class="card"><h2>📖 Story School</h2>
+   <p class="sub">Tricky lists become tiny funny stories. Read a set out loud, picture the scene, then hit 'Test me' to lock it in.</p>
+   <div class="chips">${STORIES.map((s,i)=>`<button class="chip" onclick="openStory(${i})"><span style="font-size:28px;width:40px;text-align:center">${s.emoji}</span><span>${s.title}<small>${esc(s.blurb)}</small></span></button>`).join('')}</div>
+   <div class="row"><button class="btn ghost small" onclick="go('home')">← Back</button></div></div>`;
+}
+function openStory(i){
+  const s=STORIES[i];
+  app.innerHTML=`<div class="card">
+    <div class="qmeta"><span>${s.emoji} Story School</span><span>${esc(s.title)}</span></div>
+    <h2 style="margin:6px 0 2px">${esc(s.title)}</h2>
+    <p class="sub">${esc(s.blurb)}</p>
+    ${s.groups.map(g=>`
+      <div class="explain" style="border-color:var(--purple);margin-bottom:14px">
+        <h3 style="margin:.1em 0 .3em">${esc(g.name)}</h3>
+        <p style="margin:.1em 0;color:var(--muted)">${esc(g.intro)}</p>
+        <div class="mnem"><b>🗣️ Chant:</b> "${esc(g.hook)}"</div>
+        <ul style="margin:12px 0 0;padding-left:20px">
+          ${g.items.map(it=>`<li style="margin:6px 0"><b>${esc(it.who)}</b> → ${esc(it.what)}${it.note?` <span style="color:var(--muted)">— ${esc(it.note)}</span>`:''}</li>`).join('')}
+        </ul>
+        ${g.also?`<p class="todo">${esc(g.also)}</p>`:''}
+        <div class="reality" style="color:#d8ccff;background:rgba(166,120,255,.12);border-color:#5b4b9a"><b>🎬 Picture it:</b> ${esc(g.picture)}</div>
+      </div>`).join('')}
+    <div class="row">
+      <button class="btn green" onclick="startStoryQuiz(${i})">Test me on this →</button>
+      <button class="btn ghost" onclick="go('stories')">← All stories</button>
+    </div></div>`;
+  window.scrollTo(0,0);
+}
+function buildStoryQuiz(i){
+  const s=STORIES[i];
+  if(s.quiz) return shuffle(s.quiz.slice()).map(q=>({q:q.q,opts:q.opts.slice(),answer:q.answer,hook:q.hook}));
+  const people=[]; s.groups.forEach(g=>g.items.forEach(it=>people.push(it)));
+  const pool=[...new Set(people.map(p=>p.who))];
+  return shuffle(people.slice()).slice(0,10).map(it=>{
+    const distract=shuffle(pool.filter(w=>w!==it.who)).slice(0,3);
+    const opts=shuffle([it.who,...distract]);
+    return {q:`Who is credited with: ${it.what}?`, opts, answer:opts.indexOf(it.who), hook:`${it.who} → ${it.what}.`};
+  });
+}
+function startStoryQuiz(i){ touchStreak(); story={set:i,items:buildStoryQuiz(i),idx:0,correct:0}; renderStoryQ(); }
+function renderStoryQ(){
+  const q=story.items[story.idx], n=story.items.length, s=STORIES[story.set];
+  app.innerHTML=`<div class="card">
+    <div class="qmeta"><span>${s.emoji} ${esc(s.title)}</span><span>Q ${story.idx+1} / ${n}</span></div>
+    <div class="xpbar"><i style="width:${story.idx/n*100}%"></i></div>
+    <div class="qtext" style="margin-top:12px">${esc(q.q)}</div>
+    <div class="opts" id="opts">
+      ${q.opts.map((o,k)=>`<button class="opt" data-k="${k}" onclick="storyAnswer(${k})"><span class="k">${'ABCD'[k]}</span><span>${esc(o)}</span></button>`).join('')}
+    </div><div id="feedback"></div></div>`;
+}
+function storyAnswer(k){
+  const q=story.items[story.idx], correct=k===q.answer;
+  [...document.querySelectorAll('#opts .opt')].forEach(btn=>{const bk=+btn.dataset.k;btn.disabled=true;if(bk===q.answer)btn.classList.add('correct');else if(bk===k)btn.classList.add('wrong');});
+  S.answered++; if(correct){S.correct++;S.xp+=10;story.correct++;} else {S.xp+=2;}
+  save(); paintHeader(); checkBadges();
+  const last=story.idx===story.items.length-1;
+  $('#feedback').innerHTML=`<div class="explain ${correct?'ok':'no'}">
+      <h3>${correct?'✅ Correct! (+10 XP)':'❌ Not quite. (+2 XP)'}</h3>
+      <div><b>Answer:</b> ${esc(q.opts[q.answer])}</div>
+      <div class="mnem"><b>🗣️ Hook:</b> ${esc(q.hook)}</div>
+    </div>
+    <div class="row">
+      <button class="btn ${last?'green':'blue'}" onclick="${last?'finishStory()':'nextStoryQ()'}">${last?'See score →':'Next →'}</button>
+      <button class="btn ghost" onclick="openStory(${story.set})">Re-read story</button>
+    </div>`;
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+function nextStoryQ(){ story.idx++; renderStoryQ(); window.scrollTo(0,0); }
+function finishStory(){
+  const n=story.items.length, sc=story.correct, pct=Math.round(sc/n*100);
+  app.innerHTML=`<div class="card" style="text-align:center">
+    <div class="result-emoji">${pct>=80?'🎉':pct>=50?'👍':'💪'}</div>
+    <h2>${sc} / ${n}</h2><div class="big">${pct}%</div>
+    <p class="sub">${pct>=80?"The story stuck!":pct>=50?"Getting there — re-read the hooks aloud.":"Re-read the story out loud, then try again."}</p>
+    <div class="row" style="justify-content:center">
+      <button class="btn" onclick="startStoryQuiz(${story.set})">Test again</button>
+      <button class="btn blue" onclick="openStory(${story.set})">Re-read story</button>
+      <button class="btn ghost" onclick="go('stories')">All stories</button>
+    </div></div>`;
+}
+
 /* ================= BOOT ================= */
 window.startPractice=startPractice;window.startFlash=startFlash;window.startExam=startExam;
 window.answer=answer;window.nextQ=nextQ;window.finishPractice=finishPractice;window.quitToHome=quitToHome;
 window.flashFlip=flashFlip;window.flashNext=flashNext;window.pick=pick;window.examNav=examNav;window.gradeExam=gradeExam;
 window.go=go;window.resetAll=resetAll;
+window.openStory=openStory;window.startStoryQuiz=startStoryQuiz;window.storyAnswer=storyAnswer;window.nextStoryQ=nextStoryQ;window.finishStory=finishStory;
 paintHeader(); go('home');
 </script>
 </body>
