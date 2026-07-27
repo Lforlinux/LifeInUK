@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Gamified Life in the UK Test practice for ILR 2026 — mnemonics, cartoons, mock exams and an exam-readiness check.">
+<title>Reg's Life in the UK Quest — 2026 ILR Practice</title>
+<style>
+:root{
+  --bg:#0f1226; --bg2:#151a3a; --card:#1c2350; --card2:#232b63;
+  --ink:#f4f6ff; --muted:#a6b0e0; --line:#333c78;
+  --brand:#ffd23f; --brand2:#ff8fab; --good:#2fd27a; --bad:#ff5d6c;
+  --blue:#5b8def; --purple:#a678ff; --pink:#ff8fab; --teal:#28d3c6;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --r:20px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Trebuchet MS","Segoe UI",system-ui,-apple-system,sans-serif;
+  background:radial-gradient(1200px 700px at 80% -10%,#2a2f6b 0,transparent 60%),
+             radial-gradient(900px 600px at -10% 110%,#3a2560 0,transparent 55%),
+             var(--bg);
+  color:var(--ink); line-height:1.5; min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px;margin:0 auto;padding:16px 16px 96px}
+button{font-family:inherit;cursor:pointer;border:none}
+.hidden{display:none!important}
+
+/* Top bar */
+.topbar{display:flex;align-items:center;gap:12px;padding:12px 4px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
+.logo svg{width:44px;height:44px;flex:0 0 auto}
+.spacer{flex:1}
+.stat{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
+  padding:6px 12px;border-radius:999px;font-weight:700;font-size:14px}
+.stat small{color:var(--muted);font-weight:600}
+.badgepop{color:var(--brand)}
+
+/* Cards / screens */
+.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);
+  border-radius:var(--r);padding:22px;box-shadow:var(--shadow);margin-bottom:16px}
+h1{font-size:28px;margin:.2em 0}
+h2{font-size:22px;margin:.2em 0}
+.sub{color:var(--muted);margin:.2em 0 1em}
+
+/* Home menu */
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.menu{grid-template-columns:1fr}}
+.mtile{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);
+  border-radius:18px;padding:18px;text-align:left;color:var(--ink);transition:transform .12s ease, box-shadow .12s;display:flex;gap:14px;align-items:center}
+.mtile:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.mtile .ic{width:52px;height:52px;flex:0 0 auto}
+.mtile b{font-size:17px;display:block}
+.mtile span{color:var(--muted);font-size:13px}
+
+/* Progress ring / bars */
+.xpbar{height:12px;background:#0c0f26;border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.xpbar > i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));width:0;transition:width .5s}
+
+/* Topic chips */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{background:var(--card2);border:1px solid var(--line);color:var(--ink);padding:12px 14px;border-radius:14px;
+  font-weight:700;display:flex;gap:10px;align-items:center;text-align:left}
+.chip:hover{border-color:var(--brand)}
+.chip .ic{width:34px;height:34px}
+.chip small{display:block;color:var(--muted);font-weight:600;font-size:12px}
+
+/* Question */
+.scene{display:flex;justify-content:center;margin:6px 0 4px}
+.scene svg{width:150px;height:130px}
+.qmeta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px;font-weight:700;margin-bottom:6px}
+.qtext{font-size:20px;font-weight:800;margin:6px 0 16px}
+.opts{display:grid;gap:12px}
+.opt{background:var(--card2);border:2px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left;
+  color:var(--ink);font-size:16px;font-weight:700;display:flex;gap:12px;align-items:center;transition:.12s}
+.opt:hover{border-color:var(--blue)}
+.opt .k{width:28px;height:28px;flex:0 0 auto;border-radius:8px;background:#0c0f26;border:1px solid var(--line);
+  display:grid;place-items:center;font-size:14px;color:var(--muted)}
+.opt.correct{border-color:var(--good);background:rgba(47,210,122,.14)}
+.opt.wrong{border-color:var(--bad);background:rgba(255,93,108,.14)}
+.opt.correct .k{background:var(--good);color:#04240f}
+.opt.wrong .k{background:var(--bad);color:#2a0207}
+.opt[disabled]{cursor:default}
+.opt.multi.sel{border-color:var(--blue);background:rgba(91,141,239,.14)}
+
+/* Explain box */
+.explain{margin-top:16px;border-radius:16px;padding:16px;border:1px solid var(--line);background:#0c0f26}
+.explain.ok{border-color:var(--good)}
+.explain.no{border-color:var(--bad)}
+.explain h3{margin:.1em 0 .3em;font-size:16px}
+.mnem{margin-top:12px;background:linear-gradient(180deg,#2a2350,#20204a);border:1px dashed var(--brand);
+  border-radius:14px;padding:12px 14px}
+.mnem b{color:var(--brand)}
+.reality{margin-top:10px;font-size:13px;color:#ffd9a6;background:rgba(255,140,60,.10);border:1px solid #7a5a2a;border-radius:12px;padding:10px 12px}
+.todo{margin-top:10px;font-size:14px;color:var(--muted)}
+.todo b{color:var(--ink)}
+
+/* Buttons row */
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.btn{background:linear-gradient(180deg,var(--brand),#f5b800);color:#241a00;font-weight:800;
+  padding:13px 20px;border-radius:14px;font-size:16px;box-shadow:var(--shadow)}
+.btn:hover{filter:brightness(1.05)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.blue{background:linear-gradient(180deg,var(--blue),#3f6fd0);color:#fff}
+.btn.green{background:linear-gradient(180deg,var(--good),#12a659);color:#04240f}
+.btn.small{padding:9px 14px;font-size:14px}
+
+/* Exam header */
+.examhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.timer{font-weight:900;font-size:20px}
+.timer.warn{color:var(--bad)}
+.pill{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:800;font-size:13px}
+
+/* Result */
+.big{font-size:56px;font-weight:900;margin:.1em 0}
+.result-emoji{font-size:64px}
+.readybar{height:16px;border-radius:999px;background:#0c0f26;border:1px solid var(--line);overflow:hidden}
+.readybar > i{display:block;height:100%;width:0;transition:width .7s;
+  background:linear-gradient(90deg,var(--bad),var(--brand),var(--good))}
+
+/* Badges grid */
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:12px}
+.bcell{text-align:center;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:10px 6px;opacity:.35;filter:grayscale(1)}
+.bcell.on{opacity:1;filter:none;border-color:var(--brand)}
+.bcell .be{font-size:30px}
+.bcell small{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120%);
+  background:var(--card2);border:1px solid var(--brand);color:var(--ink);padding:12px 18px;border-radius:14px;
+  font-weight:800;box-shadow:var(--shadow);transition:transform .35s;z-index:50;display:flex;gap:10px;align-items:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+.progresslabel{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo">
+      <span id="logoSvg"></span>
+      <span>Reg's UK Quest</span>
+    </div>
+    <div class="spacer"></div>
+    <div class="stat" title="Level"><span>🏅</span><span id="lvl">Lv 1</span></div>
+    <div class="stat" title="XP"><span>⭐</span><span id="xp">0</span><small>xp</small></div>
+    <div class="stat" title="Day streak"><span>🔥</span><span id="streak">0</span></div>
+  </div>
+
+  <!-- SCREENS MOUNT HERE -->
+  <div id="app"></div>
+
+  <div class="foot">
+    Reg's Life in the UK Quest · Practice tool for the ILR / citizenship test (2026) ·
+    Study companion, not affiliated with the Home Office. Always check GOV.UK for official rules.
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   REG'S LIFE IN THE UK QUEST
+   Single-file gamified practice app.
+   Data model per question:
+   { id, topic, q, opts:[...], answer:<index or [indices]>, multi:bool,
+     why:"explanation / what to do", mnemonic:"memory hook",
+     reality:"2026 reality check (optional)", scene:"topic key" }
+   ============================================================ */
+
+/* ---------- CARTOON SVGs (mascot + topic scenes) ---------- */
+const SVG = {
+  mascot: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Reg the corgi">
+    <ellipse cx="50" cy="88" rx="26" ry="6" fill="#000" opacity=".25"/>
+    <!-- crown -->
+    <path d="M34 26 L40 16 L50 24 L60 16 L66 26 Z" fill="#ffd23f" stroke="#c99400" stroke-width="1.5"/>
+    <circle cx="40" cy="16" r="2.4" fill="#ff8fab"/><circle cx="50" cy="22" r="2.4" fill="#5b8def"/><circle cx="60" cy="16" r="2.4" fill="#2fd27a"/>
+    <!-- ears -->
+    <path d="M30 34 L24 14 L40 30 Z" fill="#e59a3b"/><path d="M70 34 L76 14 L60 30 Z" fill="#e59a3b"/>
+    <path d="M31 32 L28 20 L38 30 Z" fill="#f7c6a0"/><path d="M69 32 L72 20 L62 30 Z" fill="#f7c6a0"/>
+    <!-- head -->
+    <circle cx="50" cy="50" r="24" fill="#f2a94e"/>
+    <path d="M32 52 q18 22 36 0 q-18 8 -36 0" fill="#fff7ec"/>
+    <!-- eyes -->
+    <circle cx="41" cy="47" r="4.6" fill="#20204a"/><circle cx="59" cy="47" r="4.6" fill="#20204a"/>
+    <circle cx="42.4" cy="45.6" r="1.5" fill="#fff"/><circle cx="60.4" cy="45.6" r="1.5" fill="#fff"/>
+    <!-- nose + smile -->
+    <path d="M46 56 h8 l-4 4 z" fill="#20204a"/>
+    <path d="M50 60 q-7 6 -13 2 M50 60 q7 6 13 2" stroke="#20204a" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="34" cy="56" r="3.2" fill="#ff8fab" opacity=".7"/><circle cx="66" cy="56" r="3.2" fill="#ff8fab" opacity=".7"/>
+  </svg>`,
+
+  values:`<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="20" width="100" height="66" rx="12" fill="#232b63" stroke="#333c78"/>
+    <path d="M60 74 C40 58 30 48 40 40 C48 34 58 42 60 48 C62 42 72 34 80 40 C90 48 80 58 60 74 Z" fill="#ff8fab"/>
+    <path d="M34 34 l6 6 M86 34 l-6 6" stroke="#ffd23f" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="30" cy="30" r="3" fill="#5b8def"/><circle cx="90" cy="30" r="3" fill="#2fd27a"/>
+  </svg>`,
+
+  uk:`<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+    <rect x="16" y="18" width="88" height="60" rx="8" fill="#012169"/>
+    <path d="M16 18 L104 78 M104 18 L16 78" stroke="#fff" stroke-width="12"/>
+    <path d="M16 18 L104 78 M104 18 L16 78" stroke="#C8102E" stroke-width="5"/>
+    <path d="M60 18 V78 M16 48 H104" stroke="#fff" stroke-width="18"/>
+    <path d="M60 18 V78 M16 48 H104" stroke="#C8102E" stroke-width="10"/>
+    <rect x="16" y="18" width="88" height="60" rx="8" fill="none" stroke="#ffd23f" stroke-width="2"/>
+  </svg>`,
+
+  history:`<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+    <rect x="24" y="46" width="72" height="40" fill="#8a93cf"/>
+    <path d="M24 46 h8 v-8 h8 v8 h8 v-8 h8 v8 h8 v-8 h8 v8 h8 v-8 h8 v8" fill="#8a93cf"/>
+    <rect x="52" y="60" width="16" height="26" fill="#20204a"/>
+    <rect x="34" y="56" width="8" height="8" fill="#20204a"/><rect x="78" y="56" width="8" height="8" fill="#20204a"/>
+    <path d="M60 20 l4 10 h-8 z" fill="#ffd23f"/><rect x="59" y="30" width="2" height="16" fill="#c99400"/>
+  </svg>`,
+
+  society:`<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="52" r="26" fill="#2fd27a"/>
+    <path d="M60 26 a26 26 0 0 1 0 52 z" fill="#28b96a"/>
+    <path d="M60 30 l6 12 M60 30 l-6 12 M48 44 l12 4 M72 44 l-12 4" stroke="#0c3d22" stroke-width="2"/>
+    <polygon points="60,40 63,47 71,47 65,52 67,60 60,55 53,60 55,52 49,47 57,47" fill="#ffd23f"/>
+  </svg>`,
+
+  government:`<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+    <rect x="40" y="30" width="16" height="56" fill="#c9b27a"/>
+    <rect x="36" y="24" width="24" height="8" fill="#e0cb93"/>
+    <rect x="42" y="14" width="12" height="12" rx="2" fill="#8a93cf"/>
+    <path d="M48 6 v8" stroke="#ffd23f" stroke-width="2"/>
+    <rect x="66" y="52" width="30" height="34" rx="4" fill="#5b8def"/>
+    <rect x="74" y="46" width="14" height="10" fill="#3f6fd0"/>
+    <rect x="78" y="60" width="6" height="6" fill="#fff"/>
+    <path d="M69 60 l4 4 8 -8" stroke="#fff" stroke-width="2" fill="none"/>
+  </svg>`
+};
+document.getElementById('logoSvg').innerHTML = SVG.mascot;
+
+const TOPICS = {
+  Values:{name:"Values & Principles", ic:"values", emoji:"🤝"},
+  UK:{name:"What is the UK", ic:"uk", emoji:"🇬🇧"},
+  History:{name:"A Long History", ic:"history", emoji:"🏰"},
+  Society:{name:"Modern Society", ic:"society", emoji:"🎭"},
+  Government:{name:"Government & Law", ic:"government", emoji:"🏛️"}
+};
+
+/* ---------- QUESTION BANK ---------- */
+const QUESTIONS = [
+/* ====================== VALUES & PRINCIPLES ====================== */
+{topic:"Values",q:"Which of these is a fundamental principle of British life?",opts:["Everyone must follow one religion","The rule of law — everyone is equal under it","Only citizens have any rights","The government owns all property"],answer:1,
+ why:"British life rests on democracy, the rule of law, individual liberty, and tolerance. 'Rule of law' means no one is above the law — not even the government.",
+ mnemonic:"Think 'D-LIT': Democracy, Liberty, Individual rights, Tolerance — plus the Rule of law lighting the way."},
+{topic:"Values",q:"By taking the citizenship test you agree to respect which of the following?",opts:["A single official language only","The rights and freedoms of others","One political party","A fixed career path"],answer:1,
+ why:"New residents agree to respect the law and the rights and freedoms of others — the backbone of the citizenship 'pledge'.",
+ mnemonic:"You pledge to 'respect + protect' — respect others' rights, protect the law."},
+{topic:"Values",q:"Which is a responsibility you agree to as a permanent resident?",opts:["Never leave the UK","Look after yourself, your family and the area you live in","Vote for the ruling party","Attend church weekly"],answer:1,
+ why:"Responsibilities include respecting the law, treating others with fairness, looking after yourself and family, and looking after the area you live in and the environment.",
+ mnemonic:"'Me, mine, and my street' — yourself, your family, your area."},
+{topic:"Values",q:"Which of these is one of the freedoms the UK offers?",opts:["Freedom to ignore the law","Freedom of speech","Freedom from paying any tax","Freedom to drive without a licence"],answer:1,
+ why:"Freedoms include freedom of speech, freedom of religion, freedom from unfair discrimination, and the right to a fair trial.",
+ mnemonic:"'Speak, Believe, Be treated Fair' — Speech, Belief, Fairness."},
+{topic:"Values",q:"Extremism and intolerance in the UK are:",opts:["Encouraged","Against the shared values of the UK","Required by law","Only a problem abroad"],answer:1,
+ why:"The UK is a democracy built on tolerance and mutual respect; extremism goes against these shared British values.",
+ mnemonic:"UK values = the opposite of extremism: Tolerate, don't dominate."},
+{topic:"Values",q:"What must you be able to do to apply for British citizenship or permanent residence (ILR)?",opts:["Speak English and know about life in the UK","Own a house","Be born in the UK","Renounce all other nationalities first"],answer:0,
+ why:"You must speak English (or Welsh/Scottish Gaelic) to the required level AND pass the Life in the UK Test, showing knowledge of UK life and values.",
+ mnemonic:"'Talk the talk + know the show' — English + Life in the UK test."},
+
+/* ====================== WHAT IS THE UK ====================== */
+{topic:"UK",q:"Which four countries make up the United Kingdom?",opts:["England, Scotland, Wales, Republic of Ireland","England, Scotland, Wales, Northern Ireland","England, Scotland, Cornwall, Wales","Britain, Ireland, Scotland, Wales"],answer:1,
+ why:"The UK = England, Scotland, Wales and Northern Ireland. The Republic of Ireland is a separate, independent country.",
+ mnemonic:"'We Scan Every Number' → Wales, Scotland, England, Northern Ireland."},
+{topic:"UK",q:"'Great Britain' refers to which countries?",opts:["England, Scotland and Wales","The whole UK","England and Wales only","England, Scotland and Northern Ireland"],answer:0,
+ why:"Great Britain = England, Scotland and Wales (the largest island). Add Northern Ireland and you get the United Kingdom.",
+ mnemonic:"GB has no 'N' — so no Northern Ireland: England, Scotland, Wales."},
+{topic:"UK",q:"What is the capital city of Scotland?",opts:["Glasgow","Edinburgh","Aberdeen","Dundee"],answer:1,
+ why:"Edinburgh is Scotland's capital. (London = England, Cardiff = Wales, Belfast = Northern Ireland.)",
+ mnemonic:"'Ed in a kilt' — EDinburgh for Scotland."},
+{topic:"UK",q:"What is the capital city of Wales?",opts:["Swansea","Newport","Cardiff","Bangor"],answer:2,
+ why:"Cardiff is the capital of Wales.",
+ mnemonic:"'Car' drives to Wales — CARdiff."},
+{topic:"UK",q:"What is the capital city of Northern Ireland?",opts:["Dublin","Belfast","Derry","Cork"],answer:1,
+ why:"Belfast is the capital of Northern Ireland. (Dublin is the capital of the Republic of Ireland, a separate country.)",
+ mnemonic:"'Bell rings fast in the North' — BELfast."},
+{topic:"UK",q:"The official flag of the UK is often called the:",opts:["Red Dragon","Union Flag (Union Jack)","St George's Cross","Saltire"],answer:1,
+ why:"The Union Flag, commonly the 'Union Jack', combines the crosses of St George (England), St Andrew (Scotland) and St Patrick (Ireland).",
+ mnemonic:"A UNION of three crosses = UNION Flag."},
+{topic:"UK",q:"Which country's cross is NOT represented on the Union Flag?",opts:["England","Scotland","Wales","Ireland"],answer:2,
+ why:"Wales is not represented — it was already united with England when the flag was created. Its symbol is the red dragon.",
+ mnemonic:"Wales feels left out of the flag — but keeps its Dragon."},
+{topic:"UK",q:"Whose cross is the red diagonal on a white background on the Union Flag?",opts:["St George","St Andrew","St Patrick","St David"],answer:2,
+ why:"St Patrick (Ireland) = red diagonal cross. St Andrew (Scotland) = white diagonal on blue. St George (England) = red upright cross on white.",
+ mnemonic:"PATrick's PAT of red goes diagonally."},
+{topic:"UK",q:"When is St George's Day, the patron saint's day of England?",opts:["1 March","17 March","23 April","30 November"],answer:2,
+ why:"St George (England) = 23 April. St David (Wales) = 1 March; St Patrick (NI) = 17 March; St Andrew (Scotland) = 30 November.",
+ mnemonic:"Order through the year: David 1 Mar, Patrick 17 Mar, George 23 Apr, Andrew 30 Nov → 'D-P-G-A'."},
+{topic:"UK",q:"Which patron saint's day falls on 1 March?",opts:["St Andrew","St David (Wales)","St George","St Patrick"],answer:1,
+ why:"St David is the patron saint of Wales, celebrated on 1 March.",
+ mnemonic:"Wales blooms first in spring — David on 1 March with a daffodil."},
+{topic:"UK",q:"What currency is used in the UK?",opts:["The euro","The pound sterling (£)","The dollar","The crown"],answer:1,
+ why:"The UK uses the pound sterling (£), divided into 100 pence (p).",
+ mnemonic:"UK 'pounds' the table, it doesn't 'euro' about."},
+{topic:"UK",q:"Which of these is a currency note used in the UK?",opts:["£3 note","£20 note","£25 note","£200 note"],answer:1,
+ why:"Notes come in £5, £10, £20 and £50. Coins include 1p, 2p, 5p, 10p, 20p, 50p, £1 and £2.",
+ mnemonic:"Notes double-ish: 5, 10, 20, 50."},
+{topic:"UK",q:"How often is a census (count of the whole population) carried out in the UK?",opts:["Every 5 years","Every 10 years","Every 20 years","Every year"],answer:1,
+ why:"A census happens every 10 years. The most recent were 2011 and 2021.",
+ mnemonic:"Census = 'Cent'-ish → every 10 years, once a decade."},
+
+/* ====================== HISTORY (EARLY) ====================== */
+{topic:"History",q:"What are Stonehenge and Skara Brae examples of?",opts:["Roman forts","Prehistoric (Stone Age/Bronze Age) sites","Viking settlements","Medieval castles"],answer:1,
+ why:"Stonehenge (Wiltshire) and Skara Brae (Orkney) are famous prehistoric sites, built long before written records.",
+ mnemonic:"'Stone'henge = Stone Age. Skara Brae = Stone Age village."},
+{topic:"History",q:"In which year did the Romans, under Emperor Claudius, successfully invade Britain?",opts:["55 BC","AD 43","AD 122","AD 410"],answer:1,
+ why:"Julius Caesar's raids in 55 BC failed. The real conquest came under Claudius in AD 43, beginning nearly 400 years of Roman Britain.",
+ mnemonic:"'Claudius at 43' — picture a Roman aged 43. AD 43."},
+{topic:"History",q:"Why was Hadrian's Wall built?",opts:["To keep out the French","To keep out the Picts (northern tribes)","To mark the Welsh border","As a Viking trade route"],answer:1,
+ why:"Emperor Hadrian ordered the wall (around AD 122) to keep out the Picts from the north (modern Scotland). Parts still stand today.",
+ mnemonic:"Hadrian 'had' a wall to block the Picts up North."},
+{topic:"History",q:"Roughly when did the Roman army leave Britain?",opts:["AD 43","AD 410","AD 1066","AD 789"],answer:1,
+ why:"The Romans left around AD 410 to defend other parts of their empire, ending Roman rule in Britain.",
+ mnemonic:"Romans arrive AD 43, leave AD 410 — the '4's bookend them."},
+{topic:"History",q:"Who were the Anglo-Saxons and where did they come from?",opts:["Tribes from northern Europe","Roman soldiers","Norman knights from France","Traders from Rome"],answer:0,
+ why:"The Anglo-Saxons came from what is now northern Germany, the Netherlands and Denmark, settling after the Romans left. The burial site at Sutton Hoo is Anglo-Saxon.",
+ mnemonic:"Anglo-Saxons gave 'England' its name — Angles → Engla-land."},
+{topic:"History",q:"In which year did the Vikings first raid Britain?",opts:["AD 410","AD 789","AD 1066","AD 1215"],answer:1,
+ why:"Vikings first raided around AD 789, from Denmark and Norway. Later they settled and formed communities; King Alfred the Great fought them off.",
+ mnemonic:"'Seven-eight-nine, Vikings on the brine' — 789."},
+{topic:"History",q:"Which English king defeated the Vikings and is known as 'the Great'?",opts:["Alfred the Great","William the Conqueror","Harold","Canute"],answer:0,
+ why:"King Alfred the Great of Wessex defeated the Vikings and united Anglo-Saxon kingdoms in resistance.",
+ mnemonic:"Alfred = 'All-fred up' the Vikings. Only English king called 'the Great'."},
+{topic:"History",q:"What happened in 1066 at the Battle of Hastings?",opts:["The Romans invaded","William of Normandy conquered England","The Vikings were defeated","Magna Carta was signed"],answer:1,
+ why:"In 1066, William the Conqueror (Duke of Normandy) defeated King Harold at Hastings — the last successful foreign invasion of England. He ordered the Domesday Book survey.",
+ mnemonic:"'Ten-sixty-six, William's in the mix' — 1066, last invasion."},
+{topic:"History",q:"What was the Domesday Book?",opts:["A book of prayers","A survey of England's land and people ordered by William I","A list of kings","A book of laws for Scotland"],answer:1,
+ why:"William the Conqueror ordered the Domesday Book (1086) — a great survey recording who owned land and livestock across England, for taxation.",
+ mnemonic:"'Doomsday' list — no property escaped being written down."},
+{topic:"History",q:"What did the Magna Carta of 1215 establish?",opts:["That the king was above the law","That even the king must obey certain rules/limits on his power","A new religion","The Union of Scotland and England"],answer:1,
+ why:"In 1215 King John was forced by his barons to sign Magna Carta ('the Great Charter'), establishing that the king was subject to the law — a foundation of rights.",
+ mnemonic:"Magna Carta 1215 — 'John lost his crown-power'; picture 12-15 barons cornering him."},
+{topic:"History",q:"The Black Death of 1348 was:",opts:["A great fire","A plague that killed a huge share of the population","A war with France","A Viking raid"],answer:1,
+ why:"The Black Death (1348) was a plague that killed about a third of the population of England — one of the worst disasters in its history.",
+ mnemonic:"'1348, a deadly fate' — the Black Death."},
+{topic:"History",q:"The Wars of the Roses (1455–1485) were fought between which two houses?",opts:["Tudor and Stuart","Lancaster and York","Normandy and Wessex","England and Scotland"],answer:1,
+ why:"A civil war between the House of Lancaster (red rose) and the House of York (white rose). It ended in 1485 when Henry Tudor won the Battle of Bosworth Field.",
+ mnemonic:"Lancaster = reD... no — 'Lancaster Loves Red, York Wears White'. Roses = rival houses."},
+{topic:"History",q:"Which battle in 1485 ended the Wars of the Roses and began the Tudor dynasty?",opts:["Battle of Hastings","Battle of Bosworth Field","Battle of Agincourt","Battle of Culloden"],answer:1,
+ why:"At Bosworth Field (1485), Henry Tudor defeated Richard III, became Henry VII, and married Elizabeth of York — uniting the roses into the Tudor rose.",
+ mnemonic:"'Boss-worth' — the new BOSS Henry VII took the throne, 1485."},
+
+/* ====================== HISTORY (TUDORS & STUARTS) ====================== */
+{topic:"History",q:"How many wives did King Henry VIII have?",opts:["Three","Four","Six","Two"],answer:2,
+ why:"Henry VIII had six wives. His wish to divorce and remarry led him to break with the Roman Catholic Church and set up the Church of England.",
+ mnemonic:"Fates of the 6 wives: 'Divorced, Beheaded, Died; Divorced, Beheaded, Survived.'"},
+{topic:"History",q:"Why did Henry VIII break away from the Church of Rome?",opts:["He wanted to divorce and the Pope refused","He became a Viking","He lost a war","He moved to France"],answer:0,
+ why:"The Pope refused to annul his marriage to Catherine of Aragon, so Henry made himself head of a new Church of England (start of the English Reformation).",
+ mnemonic:"'No annulment → new establishment' — Henry starts the Church of England."},
+{topic:"History",q:"Which Tudor queen is remembered as 'Bloody Mary' for persecuting Protestants?",opts:["Elizabeth I","Mary I","Mary, Queen of Scots","Jane Grey"],answer:1,
+ why:"Mary I, a devout Catholic, had many Protestants executed, earning the nickname 'Bloody Mary'. She was succeeded by her Protestant half-sister Elizabeth I.",
+ mnemonic:"'Bloody Mary' — a red drink for a red reign."},
+{topic:"History",q:"During whose reign did the English navy defeat the Spanish Armada in 1588?",opts:["Elizabeth I","Henry VIII","Mary I","James I"],answer:0,
+ why:"Under Elizabeth I in 1588, England defeated the Spanish Armada — a defining moment of her long reign, also famous for Shakespeare.",
+ mnemonic:"'Fifteen eighty-eight, Armada meets its fate' — 1588, Elizabeth I."},
+{topic:"History",q:"Which famous playwright and poet lived during the Tudor/early Stuart period?",opts:["Charles Dickens","William Shakespeare","Geoffrey Chaucer","Robert Burns"],answer:1,
+ why:"William Shakespeare (1564–1616) from Stratford-upon-Avon wrote plays like Hamlet, Macbeth and Romeo and Juliet, and many still-quoted lines.",
+ mnemonic:"Shakespeare = the 'Bard' — born and buried in Stratford."},
+{topic:"History",q:"In 1603, King James VI of Scotland also became king of England. This is known as the:",opts:["Union of the Crowns","Act of Union","Norman Conquest","Restoration"],answer:0,
+ why:"When Elizabeth I died childless in 1603, James VI of Scotland became James I of England too — the Union of the Crowns (one king, still two countries).",
+ mnemonic:"One king wears two crowns in 1603 — 6 becomes 1 (James VI → James I)."},
+{topic:"History",q:"What was the Gunpowder Plot of 1605?",opts:["A plan to blow up Parliament","A Viking raid","A fire in London","A plot to invade Scotland"],answer:0,
+ why:"In 1605 a group of Catholics, including Guy Fawkes, tried to blow up the Houses of Parliament and King James I. It failed — remembered on Bonfire Night (5 November).",
+ mnemonic:"'Remember, remember the 5th of November' — Guy Fawkes, 1605."},
+{topic:"History",q:"The English Civil War (from 1642) was a struggle between the King and:",opts:["Parliament","Scotland","France","The Church"],answer:0,
+ why:"Charles I fought Parliament over money and power. Parliament's forces (Roundheads) under Oliver Cromwell beat the King's supporters (Cavaliers).",
+ mnemonic:"'Roundheads vs Cavaliers' — short hair vs fancy hats; Parliament vs King."},
+{topic:"History",q:"What happened to King Charles I after the Civil War?",opts:["He fled to France","He was executed in 1649","He became a Viking","He signed Magna Carta"],answer:1,
+ why:"Charles I was executed in 1649. England briefly became a republic (the Commonwealth), with Oliver Cromwell as Lord Protector.",
+ mnemonic:"'Sixteen forty-nine, the King's off-line' — Charles I executed 1649."},
+{topic:"History",q:"The return of the monarchy in 1660 under Charles II is called the:",opts:["Restoration","Reformation","Renaissance","Revolution"],answer:0,
+ why:"After Cromwell died, Parliament invited Charles II back in 1660 — the Restoration. His reign saw the Plague (1665), the Great Fire of London (1666) and the founding of the Royal Society.",
+ mnemonic:"RE-store the king = Restoration, 1660."},
+{topic:"History",q:"The Great Fire of London took place in which year?",opts:["1605","1666","1707","1815"],answer:1,
+ why:"The Great Fire of London (1666) destroyed much of the city. Sir Christopher Wren later rebuilt St Paul's Cathedral.",
+ mnemonic:"'Sixteen sixty-six, London's in a fix' — three 6's, a fiery year."},
+{topic:"History",q:"The Glorious Revolution of 1688 brought which king to the throne?",opts:["William of Orange (William III)","James II","Charles I","George I"],answer:0,
+ why:"In 1688, Protestant William of Orange invaded at Parliament's invitation and James II fled. This 'Glorious Revolution' led to a constitutional monarchy and the Bill of Rights (1689).",
+ mnemonic:"'William oranges out James' in 1688 — a bloodless, 'glorious' swap."},
+{topic:"History",q:"The Act of Union in 1707 joined which kingdoms into 'Great Britain'?",opts:["England and Wales","England and Scotland","England and Ireland","Scotland and Ireland"],answer:1,
+ why:"The Act of Union 1707 united the kingdoms of England and Scotland, creating the Kingdom of Great Britain with one Parliament.",
+ mnemonic:"'Seventeen-oh-seven, England+Scotland in heaven' — 1707 union."},
+{topic:"History",q:"Bonnie Prince Charlie was finally defeated at which 1746 battle?",opts:["Battle of Culloden","Battle of Bosworth","Battle of Hastings","Battle of Waterloo"],answer:0,
+ why:"The Jacobite rising ended at Culloden (1746), the last battle fought on British soil, defeating Charles Edward Stuart ('Bonnie Prince Charlie').",
+ mnemonic:"'Culloden closes the Jacobites' — Bonnie Prince beaten, 1746."},
+
+/* ====================== HISTORY (GEORGIAN / VICTORIAN) ====================== */
+{topic:"History",q:"Who was a key figure in the movement to abolish the slave trade?",opts:["William Wilberforce","Isaac Newton","Winston Churchill","Horatio Nelson"],answer:0,
+ why:"William Wilberforce campaigned against slavery. The slave trade was made illegal in 1807, and slavery abolished across the British Empire by the 1833 Act.",
+ mnemonic:"'Will-ber-force' used his force of will to free slaves."},
+{topic:"History",q:"Admiral Nelson is famous for which 1805 naval victory against the French and Spanish?",opts:["Battle of Trafalgar","Battle of Waterloo","Battle of Britain","Battle of the Boyne"],answer:0,
+ why:"Admiral Horatio Nelson won the Battle of Trafalgar (1805) but was killed in it. Nelson's Column in Trafalgar Square, London, commemorates him. His ship was HMS Victory.",
+ mnemonic:"Nelson's 'Trafalgar' = Trafalgar Square. 1805, a 'Victory'."},
+{topic:"History",q:"Who led the British and allied forces to defeat Napoleon at Waterloo in 1815?",opts:["The Duke of Wellington","Admiral Nelson","Oliver Cromwell","Winston Churchill"],answer:0,
+ why:"The Duke of Wellington defeated Napoleon at the Battle of Waterloo (1815). He later became Prime Minister.",
+ mnemonic:"Wellington 'boots' Napoleon out at Waterloo, 1815."},
+{topic:"History",q:"The Industrial Revolution made Britain the first country to:",opts:["Industrialise on a large scale (factories, steam, machines)","Fly aeroplanes","Land on the moon","Use the internet"],answer:0,
+ why:"Britain led the Industrial Revolution — machinery, steam power (James Watt), textile mills and railways transformed the economy in the 18th–19th centuries.",
+ mnemonic:"'Steam, spinning, steel' — Britain industrialises first."},
+{topic:"History",q:"How long did Queen Victoria reign?",opts:["From 1837 to 1901 — over 60 years","Just 10 years","From 1900 to 1910","From 1707 to 1745"],answer:0,
+ why:"Queen Victoria reigned 1837–1901, over 60 years — the Victorian age of empire, industry and reform.",
+ mnemonic:"Victoria = 'Victory' over a long time — 1837 to 1901."},
+{topic:"History",q:"Florence Nightingale is known as the founder of:",opts:["Modern nursing","The Royal Navy","The BBC","The NHS"],answer:0,
+ why:"Florence Nightingale nursed soldiers in the Crimean War and founded the first school of nursing, becoming known as the founder of modern nursing.",
+ mnemonic:"'Nightingale with a lamp at night' — the lady of nursing."},
+
+/* ====================== HISTORY (20th CENTURY) ====================== */
+{topic:"History",q:"The First World War lasted from:",opts:["1914 to 1918","1939 to 1945","1900 to 1910","1918 to 1928"],answer:0,
+ why:"World War I ran 1914–1918. Remembrance Day (11 November, poppies) marks the moment it ended — the 11th hour of the 11th day of the 11th month.",
+ mnemonic:"WWI: '14 to '18. Ends 11/11 — poppies for the fallen."},
+{topic:"History",q:"When did the Second World War take place?",opts:["1914–1918","1939–1945","1945–1950","1930–1936"],answer:1,
+ why:"World War II ran 1939–1945. Britain, led by Winston Churchill, fought Nazi Germany. VE Day (8 May 1945) marked victory in Europe.",
+ mnemonic:"WWII: '39 to '45 — 'thirty-nine to forty-five, allies survive.'"},
+{topic:"History",q:"Who was the British Prime Minister for most of the Second World War?",opts:["Winston Churchill","Clement Attlee","Margaret Thatcher","Tony Blair"],answer:0,
+ why:"Winston Churchill led Britain through most of WWII and is remembered for his defiant wartime speeches. He was later voted the greatest Briton.",
+ mnemonic:"Churchill's 'V for Victory' and cigar — wartime PM."},
+{topic:"History",q:"The 1940 air battle in which the RAF defended Britain against German bombers is called the:",opts:["Battle of Britain","Battle of Waterloo","Battle of Trafalgar","Battle of the Somme"],answer:0,
+ why:"In the Battle of Britain (1940), the Royal Air Force's Spitfires and Hurricanes defeated the German Luftwaffe, preventing invasion. Churchill: 'Never was so much owed by so many to so few.'",
+ mnemonic:"'Battle of Britain, in the sky, 1940' — the Few in Spitfires."},
+{topic:"History",q:"Sir Alexander Fleming is famous for discovering:",opts:["Penicillin","Gravity","The telephone","Radar"],answer:0,
+ why:"Scottish scientist Alexander Fleming discovered penicillin in 1928, the first widely used antibiotic — a huge medical breakthrough.",
+ mnemonic:"'Fleming's fungus' — mould that became penicillin."},
+{topic:"History",q:"When were women over 30 first given the right to vote in the UK?",opts:["1918","1928","1969","1950"],answer:0,
+ why:"In 1918 women over 30 got the vote (men over 21 too). In 1928 women won equal voting rights at age 21. Emmeline Pankhurst led the suffragette movement.",
+ mnemonic:"'1918 opens the gate (age 30); 1928 makes it equal (age 21).'"},
+{topic:"History",q:"The National Health Service (NHS) was established in which year?",opts:["1928","1948","1969","1979"],answer:1,
+ why:"The NHS was set up in 1948 to provide free healthcare, based on the Beveridge Report (1942) and delivered by Clement Attlee's government. Aneurin Bevan led it.",
+ mnemonic:"'Nineteen forty-eight, the NHS is great' — 1948."},
+{topic:"History",q:"Who became the UK's first woman Prime Minister, in 1979?",opts:["Margaret Thatcher","Theresa May","Queen Elizabeth II","Emmeline Pankhurst"],answer:0,
+ why:"Margaret Thatcher became the UK's first female Prime Minister in 1979 and served until 1990 — the longest-serving PM of the 20th century.",
+ mnemonic:"Thatcher = 'the Iron Lady', first female PM, 1979."},
+{topic:"History",q:"The Good Friday Agreement of 1998 mainly concerned:",opts:["Peace in Northern Ireland","Joining the euro","Building the Channel Tunnel","Scottish independence"],answer:0,
+ why:"The Good Friday (Belfast) Agreement of 1998 was a major step in the Northern Ireland peace process, largely ending 'the Troubles' and setting up devolved government there.",
+ mnemonic:"'Good Friday, good peace' — Northern Ireland, 1998."},
+{topic:"History",q:"Devolution in the late 1990s created a Scottish Parliament and a Welsh Assembly (Senedd). What does devolution mean?",opts:["Leaving the UK","Moving some powers from central government to Scotland, Wales and NI","Joining the EU","Abolishing local councils"],answer:1,
+ why:"Devolution (from 1997–99) transferred certain powers from the UK Parliament to new bodies in Scotland, Wales and Northern Ireland, while the UK stays united.",
+ mnemonic:"De-VOLVE = powers 'roll out' to the nations, not away from the UK."},
+{topic:"History",q:"At what age were young people given the right to vote from 1969?",opts:["16","18","21","25"],answer:1,
+ why:"In 1969 the voting age was lowered from 21 to 18, where it remains for UK general elections.",
+ mnemonic:"'1969 → age 18' — flip 21 down to 18."},
+
+/* ====================== MODERN SOCIETY ====================== */
+{topic:"Society",q:"Which sport is traditionally associated with Wimbledon?",opts:["Golf","Tennis","Cricket","Rugby"],answer:1,
+ why:"Wimbledon is the oldest tennis tournament in the world and a Grand Slam, held in London each summer.",
+ mnemonic:"'Wimble-DONE with a racket' — Wimbledon = tennis + strawberries."},
+{topic:"Society",q:"Where did the game of golf originate?",opts:["Scotland","Wales","France","Ireland"],answer:0,
+ why:"Golf originated in Scotland in the Middle Ages. St Andrews in Scotland is regarded as the home of golf.",
+ mnemonic:"'Golf in the glens' — Scotland, home of golf (St Andrews)."},
+{topic:"Society",q:"The Grand National and Royal Ascot are famous UK events in which sport?",opts:["Horse racing","Motor racing","Rowing","Cycling"],answer:0,
+ why:"Horse racing has a long history in the UK; famous meetings include the Grand National (Aintree) and Royal Ascot.",
+ mnemonic:"'Grand National gallop' — horses, not cars."},
+{topic:"Society",q:"Which UK city hosted the summer Olympic Games in 2012?",opts:["Manchester","London","Birmingham","Glasgow"],answer:1,
+ why:"London hosted the 2012 Olympic and Paralympic Games — London's third time hosting the summer Olympics.",
+ mnemonic:"'20-12, London delivers' — the 2012 Games."},
+{topic:"Society",q:"Who wrote plays such as Hamlet and Romeo and Juliet?",opts:["Charles Dickens","William Shakespeare","Jane Austen","Robert Burns"],answer:1,
+ why:"William Shakespeare, England's most famous playwright and poet, wrote Hamlet, Macbeth, Romeo and Juliet and many others.",
+ mnemonic:"Shakespeare = the Bard of Avon; 'To be or not to be'."},
+{topic:"Society",q:"Which of these authors wrote Pride and Prejudice?",opts:["Jane Austen","Charles Dickens","Emily Brontë","Agatha Christie"],answer:0,
+ why:"Jane Austen wrote Pride and Prejudice and Sense and Sensibility, novels focusing on relationships and society. She features on the £10 note.",
+ mnemonic:"'Austen's Pride' — Jane Austen, on your tenner."},
+{topic:"Society",q:"Robert Burns, whose work includes 'Auld Lang Syne', is the national poet of:",opts:["Wales","Scotland","England","Northern Ireland"],answer:1,
+ why:"Robert Burns is Scotland's national poet. 'Auld Lang Syne' is sung at New Year (Hogmanay). Burns Night (25 January) celebrates him.",
+ mnemonic:"'Burns burns bright in Scotland' — Auld Lang Syne, Burns Night."},
+{topic:"Society",q:"Bonfire Night on 5 November remembers which event?",opts:["The Great Fire of London","The failed Gunpowder Plot of 1605","The end of WWII","Guy Fawkes' birthday"],answer:1,
+ why:"5 November (Bonfire/Guy Fawkes Night) recalls the failed 1605 Gunpowder Plot, with fireworks and bonfires.",
+ mnemonic:"'Remember, remember the 5th of November' — fireworks for Fawkes."},
+{topic:"Society",q:"Remembrance Day, when poppies are worn, falls on:",opts:["25 December","11 November","1 January","31 October"],answer:1,
+ why:"Remembrance Day (11 November) honours those who died in wars. Poppies are worn; a two-minute silence is held at 11am.",
+ mnemonic:"11/11 — poppies at the 11th hour of the 11th day."},
+{topic:"Society",q:"Hogmanay is the traditional celebration of what, in Scotland?",opts:["Midsummer","New Year","Harvest","A royal birthday"],answer:1,
+ why:"Hogmanay is the Scottish celebration of New Year, often bigger than Christmas there, with fireworks and 'Auld Lang Syne'.",
+ mnemonic:"'Hog-man-AY, ring the New Year' — Scottish Hogmanay."},
+{topic:"Society",q:"Diwali, the festival of lights, is celebrated by which communities in the UK?",opts:["Hindus and Sikhs","Only Christians","Only Muslims","Nobody in the UK"],answer:0,
+ why:"Diwali, the festival of lights, is celebrated mainly by Hindus and Sikhs. The UK is a diverse society with many faiths and festivals.",
+ mnemonic:"'Diwali = lights for Hindus & Sikhs' — a shared glow."},
+{topic:"Society",q:"The patron flower/plant emblem of Wales is the:",opts:["Rose","Daffodil (and leek)","Thistle","Shamrock"],answer:1,
+ why:"National emblems: England = rose, Scotland = thistle, Wales = daffodil/leek, Northern Ireland = shamrock.",
+ mnemonic:"'Rose, Thistle, Daffodil, Shamrock' → England, Scotland, Wales, NI."},
+{topic:"Society",q:"Which architect designed St Paul's Cathedral after the Great Fire of London?",opts:["Sir Christopher Wren","Sir Isaac Newton","Sir Edwin Lutyens","Inigo Jones"],answer:0,
+ why:"Sir Christopher Wren designed the new St Paul's Cathedral, one of London's most famous landmarks, after the 1666 fire.",
+ mnemonic:"'Wren built the church so a bird could nest' — Wren = St Paul's."},
+{topic:"Society",q:"The Turner Prize is a well-known UK award for:",opts:["Modern art","Cooking","Football","Gardening"],answer:0,
+ why:"The Turner Prize is a famous contemporary art award, named after painter J.M.W. Turner. British artists include Constable, Turner, Hepworth and Henry Moore.",
+ mnemonic:"'Turner = art turner' — modern art prize."},
+{topic:"Society",q:"The Edinburgh Festival is best known for:",opts:["Motor racing","Performing arts and comedy","Horse racing","Farming shows"],answer:1,
+ why:"The Edinburgh Festival (including the Fringe) is a major celebration of theatre, comedy and the performing arts held each August in Scotland.",
+ mnemonic:"'Edinburgh Fringe = stage on the edge' — arts festival."},
+{topic:"Society",q:"Which mountainous national park is found in Wales?",opts:["The Lake District","Snowdonia (Eryri)","The Peak District","Loch Lomond"],answer:1,
+ why:"Snowdonia (Eryri) in North Wales contains Wales' highest peak, Snowdon. It's a famous national park.",
+ mnemonic:"'Snow on Snowdon in Wales' — Snowdonia."},
+
+/* ====================== GOVERNMENT, LAW & YOUR ROLE ====================== */
+{topic:"Government",q:"The UK is governed as a:",opts:["Constitutional monarchy","Absolute monarchy","Military dictatorship","Presidential republic"],answer:0,
+ why:"The UK is a constitutional monarchy: the monarch is head of state but Parliament makes the laws and the elected government runs the country.",
+ mnemonic:"'Crown reigns, Parliament rules' — constitutional monarchy."},
+{topic:"Government",q:"Which of these is part of the UK Parliament?",opts:["The House of Commons","The Supreme Court","The Cabinet Office","The Civil Service"],answer:0,
+ why:"Parliament is made up of the House of Commons, the House of Lords and the monarch. The Commons is the elected chamber.",
+ mnemonic:"Parliament = 'Commons + Lords + Crown'."},
+{topic:"Government",q:"Members of the House of Commons (MPs) are:",opts:["Appointed by the King","Elected by the public","Inherited titles","Chosen by the Lords"],answer:1,
+ why:"MPs are elected by the public in general elections, held at least every five years, using 'first past the post' in 650 constituencies.",
+ mnemonic:"'Commons = Common people elect' MPs."},
+{topic:"Government",q:"How many constituencies elect an MP to the House of Commons?",opts:["around 100","around 650","around 1,000","around 50"],answer:1,
+ why:"There are around 650 constituencies, each electing one MP. The candidate with the most votes wins (first past the post).",
+ mnemonic:"'6-5-0 seats in a row' — 650 MPs."},
+{topic:"Government",q:"Who is generally the head of the UK government?",opts:["The monarch","The Prime Minister","The Speaker","The Archbishop of Canterbury"],answer:1,
+ why:"The Prime Minister leads the government, usually the leader of the party with the most MPs, and appoints the Cabinet of senior ministers.",
+ mnemonic:"PM = 'Prime Mover' of the government."},
+{topic:"Government",q:"Members of the House of Lords are:",opts:["Elected every 5 years","Not elected by the public","Chosen by lottery","Appointed by councils"],answer:1,
+ why:"The House of Lords is not elected. It includes life peers, some hereditary peers and senior bishops. It reviews and can suggest changes to laws.",
+ mnemonic:"'Lords aren't elected — they're selected.'"},
+{topic:"Government",q:"What is the role of the Speaker in the House of Commons?",opts:["To lead the winning party","To keep order in debates and stay politically neutral","To crown the monarch","To command the army"],answer:1,
+ why:"The Speaker chairs debates in the Commons, keeps order and remains politically neutral, representing the House.",
+ mnemonic:"'Order! Order!' — the neutral Speaker keeps the peace."},
+{topic:"Government",q:"The group of MPs from the largest party NOT in government is called the:",opts:["The Cabinet","The Opposition","The Civil Service","The Lords"],answer:1,
+ why:"The second-largest party forms the Opposition. Its leader is the Leader of the Opposition and it has a 'shadow cabinet' scrutinising the government.",
+ mnemonic:"'Opposite side = Opposition' with its shadow cabinet."},
+{topic:"Government",q:"The civil service, which delivers government policy, must be:",opts:["Loyal to one party","Politically neutral and professional","Elected by voters","Made up of MPs"],answer:1,
+ why:"Civil servants are politically neutral and chosen on merit; they serve whichever government is in power.",
+ mnemonic:"'Civil = neutral servant' — serves any government."},
+{topic:"Government",q:"At what age can you vote in a UK general election?",opts:["16","17","18","21"],answer:2,
+ why:"You can vote from age 18 in UK general elections (16 for some Scottish and Welsh elections). You must be on the electoral register.",
+ mnemonic:"'Adult at 18 = vote at 18.'"},
+{topic:"Government",q:"To vote in an election, you must first:",opts:["Own property","Be on the electoral register","Pay a fee","Join a political party"],answer:1,
+ why:"You must register on the electoral roll to vote. Voting is by secret ballot, so no one can force you to reveal your choice.",
+ mnemonic:"'No register, no vote' — get on the roll first."},
+{topic:"Government",q:"The UK's monarch's role today is mainly:",opts:["To make and pass laws personally","Ceremonial, as head of state","To command elections","To run the courts"],answer:1,
+ why:"The monarch is head of state with a mainly ceremonial role, staying politically neutral, while Parliament and government hold real power.",
+ mnemonic:"'Crown = ceremony, Commons = command.'"},
+{topic:"Government",q:"Which court in England and Wales deals with the most serious criminal cases, using a jury?",opts:["Magistrates' Court","Crown Court","County Court","Small Claims Court"],answer:1,
+ why:"The Crown Court hears serious criminal cases with a judge and a jury of 12. Magistrates' Courts handle minor crimes; County Courts handle civil disputes.",
+ mnemonic:"'Serious Crown, small Magistrate' — Crown Court = big cases + jury."},
+{topic:"Government",q:"How many members are on a jury in a Crown Court in England, Wales and Northern Ireland?",opts:["6","10","12","15"],answer:2,
+ why:"A jury in England, Wales and NI has 12 members (15 in Scotland). Jurors are randomly chosen from the electoral register and must reach a verdict.",
+ mnemonic:"'12 good people and true' — jury of 12 (Scotland: 15)."},
+{topic:"Government",q:"If you are asked to do jury service, you should:",opts:["Ignore it","Attend — it is a public duty","Pay a fine to skip it","Send a friend instead"],answer:1,
+ why:"Jury service is a duty of citizenship. If summoned and eligible, you must attend and help decide a case fairly, unless legally excused.",
+ mnemonic:"'Summoned to serve' — jury duty is a responsibility, not optional."},
+{topic:"Government",q:"Judges in the UK are responsible for:",opts:["Winning elections","Interpreting and applying the law independently","Setting tax rates","Running the police"],answer:1,
+ why:"The judiciary interprets and applies the law and must be independent of government. This independence is a key part of the rule of law.",
+ mnemonic:"'Judges judge free' — independent of politics."},
+{topic:"Government",q:"The Police and Crime Commissioners (in England and Wales) are:",opts:["Appointed by judges","Elected by the public","Chosen by the Prime Minister","Senior police officers"],answer:1,
+ why:"Police and Crime Commissioners are elected by the public to hold local police forces to account. The police must themselves obey the law.",
+ mnemonic:"'PCC = Public Chooses the Commissioner' — elected."},
+{topic:"Government",q:"Which body collects taxes such as Income Tax and National Insurance?",opts:["The DVLA","HM Revenue & Customs (HMRC)","The NHS","The Home Office"],answer:1,
+ why:"HM Revenue & Customs (HMRC) collects taxes. Income Tax and National Insurance are usually deducted from wages; the self-employed use Self Assessment.",
+ mnemonic:"'HMRC takes your MRC — Money for the Realm's Costs.'"},
+{topic:"Government",q:"At what age can you usually apply to drive a car in the UK?",opts:["16","17","18","21"],answer:1,
+ why:"You can drive a car from age 17 (mopeds from 16). You need a licence, valid insurance, and the vehicle needs an MOT test if over 3 years old.",
+ mnemonic:"'Seven-teen behind the wheel' — drive a car at 17."},
+{topic:"Government",q:"Which of these is a good way to take part in your local community?",opts:["Never speaking to neighbours","Volunteering, helping local groups or becoming a school governor","Avoiding jury service","Refusing to pay tax"],answer:1,
+ why:"Getting involved — volunteering, joining charities, being a school governor, or helping neighbours — is encouraged as part of being a good citizen.",
+ mnemonic:"'Give time, join in' — volunteering builds community."},
+{topic:"Government",q:"Looking after the environment, e.g. by recycling, is:",opts:["Illegal","A way everyone can help their community","Only for businesses","Discouraged"],answer:1,
+ why:"Protecting the environment — recycling, saving energy, walking or cycling — is a way everyone can contribute to the community and the country.",
+ mnemonic:"'Reduce, reuse, recycle' — everyone's role."},
+{topic:"Government",q:"The Commonwealth is:",opts:["A single country","An association of countries, most once part of the British Empire","A UK political party","A type of court"],answer:1,
+ why:"The Commonwealth is a voluntary association of independent countries (over 50), most with historic links to the British Empire, promoting cooperation, democracy and development.",
+ mnemonic:"'Common wealth = shared friendship of many nations.'",
+ reality:"The reigning monarch (now King Charles III) is Head of the Commonwealth."},
+{topic:"Government",q:"The 3rd-edition test handbook describes the UK's head of state as 'the Queen'. In reality, since September 2022 the monarch is:",opts:["King Charles III","Queen Elizabeth II","King William","There is no monarch"],answer:0,
+ why:"Test questions may still refer to 'Her Majesty the Queen' because the official handbook has not been updated. In real life, King Charles III is the monarch and head of state.",
+ mnemonic:"Test says 'Queen'; life says 'King Charles III' — know both.",
+ reality:"Answer the handbook's wording in the exam, but the current monarch is King Charles III."},
+
+/* ====================== EXTRA: VALUES ====================== */
+{topic:"Values",q:"Which of these behaviours goes AGAINST British values?",opts:["Treating others with respect","Bullying or harassing others because of who they are","Obeying the law","Voting in elections"],answer:1,
+ why:"Discrimination, bullying and harassment based on race, religion, sex, sexuality or disability go against British values of fairness, tolerance and equality.",
+ mnemonic:"'Respect over reject' — tolerance is the British value."},
+{topic:"Values",q:"Men and women in the UK are:",opts:["Not equal under the law","Equal and have the same rights","Only equal at work","Equal only if married"],answer:1,
+ why:"Men and women are equal and have equal rights in law, in work, education and public life. Discrimination by sex is illegal.",
+ mnemonic:"'Same rights, same fight' — men and women equal."},
+
+/* ====================== EXTRA: WHAT IS THE UK ====================== */
+{topic:"UK",q:"Which of these is a country of the UK that has its OWN devolved parliament in Edinburgh?",opts:["Wales","Scotland","Cornwall","Yorkshire"],answer:1,
+ why:"Scotland has the Scottish Parliament in Edinburgh (Holyrood). Wales has the Senedd in Cardiff; Northern Ireland has an Assembly at Stormont.",
+ mnemonic:"'Holyrood in Edinburgh' — Scotland's parliament."},
+{topic:"UK",q:"The Welsh emblem, a national symbol of Wales, is the:",opts:["Rose","Red dragon","Thistle","Lion"],answer:1,
+ why:"The red dragon (Y Ddraig Goch) appears on the Welsh flag. It's not on the Union Flag, but is a strong symbol of Wales.",
+ mnemonic:"'Wales breathes fire' — the red dragon."},
+{topic:"UK",q:"Which mountain is the highest in the UK?",opts:["Snowdon","Ben Nevis","Scafell Pike","Slieve Donard"],answer:1,
+ why:"Ben Nevis in Scotland is the highest mountain in the UK. Snowdon is highest in Wales; Scafell Pike in England.",
+ mnemonic:"'Ben is the big one' — Ben Nevis, tallest of all."},
+{topic:"UK",q:"How many people, roughly, live in the UK today?",opts:["About 6 million","About 67 million","About 200 million","About 10 million"],answer:1,
+ why:"The UK's population is around 67 million. England is by far the most populous of the four nations.",
+ mnemonic:"'Sixty-seven, UK's heaven' — ~67 million."},
+
+/* ====================== EXTRA: HISTORY ====================== */
+{topic:"History",q:"Who was the first Roman general to lead an invasion of Britain, in 55 BC?",opts:["Julius Caesar","Claudius","Hadrian","Nero"],answer:0,
+ why:"Julius Caesar led raids in 55 and 54 BC but did not conquer. Successful conquest came under Claudius in AD 43.",
+ mnemonic:"'Caesar came, saw, but didn't conquer' — 55 BC raid only."},
+{topic:"History",q:"The Battle of Agincourt (1415), a famous English victory in France, was won by:",opts:["Henry V","Henry VIII","Richard III","William the Conqueror"],answer:0,
+ why:"King Henry V won the Battle of Agincourt in 1415 during the Hundred Years War against France, aided by English and Welsh longbowmen.",
+ mnemonic:"'Henry the FIFTH at Agincourt' — 1415, longbows win."},
+{topic:"History",q:"The Bill of Rights (1689) confirmed that:",opts:["The monarch could tax freely","Parliament, not the monarch, held key powers","The Pope ruled England","There would be no more elections"],answer:1,
+ why:"After the Glorious Revolution, the Bill of Rights (1689) limited the monarch's power and confirmed Parliament's authority — a step towards constitutional monarchy.",
+ mnemonic:"'1689 — Parliament draws the line' on royal power."},
+{topic:"History",q:"Sir Isaac Newton is best known for his work on:",opts:["Gravity and physics","Painting","Music","Exploring the Empire"],answer:0,
+ why:"Sir Isaac Newton, one of Britain's greatest scientists, developed theories of gravity and motion and wrote 'Principia Mathematica'.",
+ mnemonic:"'Newton's apple falls' — gravity."},
+{topic:"History",q:"The 'Enlightenment' thinkers Adam Smith and David Hume were from which country?",opts:["Scotland","Wales","France","Italy"],answer:0,
+ why:"The Scottish Enlightenment produced thinkers like economist Adam Smith ('The Wealth of Nations') and philosopher David Hume.",
+ mnemonic:"'Smart Scots' — Smith and Hume of the Enlightenment."},
+{topic:"History",q:"Which Britons are credited with developing the world's first working television?",opts:["John Logie Baird","Tim Berners-Lee","Alan Turing","Isambard Kingdom Brunel"],answer:0,
+ why:"Scotsman John Logie Baird was a pioneer of television in the 1920s. (Tim Berners-Lee invented the World Wide Web; Alan Turing pioneered computing.)",
+ mnemonic:"'Baird on the box' — television pioneer."},
+{topic:"History",q:"Who is credited with inventing the World Wide Web?",opts:["Sir Tim Berners-Lee","Alexander Graham Bell","Alan Turing","Charles Babbage"],answer:0,
+ why:"British scientist Sir Tim Berners-Lee invented the World Wide Web in 1989–90, transforming how the world shares information.",
+ mnemonic:"'Berners-Lee set the web free' — the WWW."},
+{topic:"History",q:"The engineer Isambard Kingdom Brunel is famous for building:",opts:["Railways, bridges and ships","The first computer","Penicillin","The Union Flag"],answer:0,
+ why:"Isambard Kingdom Brunel was a great Victorian engineer who built railways (Great Western), tunnels, bridges and steamships.",
+ mnemonic:"'Brunel builds big' — bridges, tunnels, trains, ships."},
+{topic:"History",q:"The mathematician and WWII codebreaker who helped crack the Enigma code was:",opts:["Alan Turing","Isaac Newton","Winston Churchill","Ernest Rutherford"],answer:0,
+ why:"Alan Turing led work breaking the German Enigma code at Bletchley Park, helping win WWII, and is seen as a father of computer science.",
+ mnemonic:"'Turing turns the code' — Enigma cracked."},
+
+/* ====================== EXTRA: SOCIETY ====================== */
+{topic:"Society",q:"The famous clock tower at the Houses of Parliament, whose great bell is 'Big Ben', is officially called the:",opts:["Elizabeth Tower","Victoria Tower","Nelson's Column","The Shard"],answer:0,
+ why:"'Big Ben' is really the nickname of the great bell; the tower was renamed the Elizabeth Tower in 2012 for Queen Elizabeth II's Diamond Jubilee.",
+ mnemonic:"'Big Ben rings in the Elizabeth Tower.'"},
+{topic:"Society",q:"The Giant's Causeway, a natural rock landmark, is located in:",opts:["Scotland","Northern Ireland","Cornwall","Wales"],answer:1,
+ why:"The Giant's Causeway in Northern Ireland is a famous landscape of hexagonal basalt columns and a UNESCO World Heritage Site.",
+ mnemonic:"'Giant steps in the North' — Giant's Causeway, NI."},
+{topic:"Society",q:"Which of these is a traditional British dish?",opts:["Fish and chips","Sushi","Tacos","Paella"],answer:0,
+ why:"Fish and chips is a classic British dish. Others include the Sunday roast, the full English breakfast, and haggis in Scotland.",
+ mnemonic:"'Fish + chips, a British classic' — with mushy peas."},
+{topic:"Society",q:"The 'Proms' (BBC Promenade Concerts) are a summer season of what?",opts:["Classical music concerts","Football matches","Comedy shows","Farming fairs"],answer:0,
+ why:"The Proms are an eight-week summer season of mostly classical music concerts, ending with the famous 'Last Night of the Proms'.",
+ mnemonic:"'Proms = classical prom-enade' of music."},
+{topic:"Society",q:"Which annual event sees a race between Oxford and Cambridge Universities?",opts:["The Boat Race (rowing)","The Grand National","Wimbledon","The FA Cup"],answer:0,
+ why:"The University Boat Race is an annual rowing contest on the River Thames between Oxford and Cambridge.",
+ mnemonic:"'Oxford vs Cambridge, oars out' — the Boat Race."},
+{topic:"Society",q:"St Andrew's Day, Scotland's national day, is celebrated on:",opts:["1 March","23 April","30 November","17 March"],answer:2,
+ why:"St Andrew (Scotland) is celebrated on 30 November — the last of the four patron saints' days in the year.",
+ mnemonic:"'Andrew ends the year' — 30 November."},
+{topic:"Society",q:"The poppy is worn in November to:",opts:["Celebrate the harvest","Remember those who died in wars","Mark the New Year","Celebrate a royal wedding"],answer:1,
+ why:"The red poppy is worn around Remembrance Day (11 November) to remember members of the armed forces who died in conflicts.",
+ mnemonic:"'Poppies for the fallen' — Remembrance."},
+{topic:"Society",q:"Which of these is a UK public (bank) holiday?",opts:["Christmas Day","American Independence Day","Bastille Day","Thanksgiving"],answer:0,
+ why:"UK bank holidays include Christmas Day, Boxing Day, New Year's Day, Good Friday, Easter Monday and others. Bastille Day and Thanksgiving are not UK holidays.",
+ mnemonic:"'Christmas + Boxing Day' — classic UK bank holidays."},
+
+/* ====================== EXTRA: GOVERNMENT & LAW ====================== */
+{topic:"Government",q:"A general election must be held at least once every:",opts:["2 years","5 years","10 years","year"],answer:1,
+ why:"A UK general election must be held at least every five years, to elect MPs to the House of Commons.",
+ mnemonic:"'High five for elections' — at least every 5 years."},
+{topic:"Government",q:"The voting system used to elect MPs to the UK Parliament is called:",opts:["Proportional representation","First past the post","Single transferable vote","Random selection"],answer:1,
+ why:"In 'first past the post', the candidate with the most votes in each constituency wins the seat, even without a majority.",
+ mnemonic:"'Most votes first past the post' — winner takes the seat."},
+{topic:"Government",q:"The official who keeps discipline among MPs and ensures they vote is called a:",opts:["Whip","Speaker","Sheriff","Clerk"],answer:0,
+ why:"Whips are MPs appointed by each party to organise their members and make sure they attend and vote in Parliament.",
+ mnemonic:"'Whips keep MPs in line' — party discipline."},
+{topic:"Government",q:"Which of these can you do from age 18 in the UK?",opts:["Buy alcohol in a pub","Drive a lorry","Sit in the House of Lords by right","Become a High Court judge"],answer:0,
+ why:"At 18 you become a legal adult: you can vote and buy alcohol. Some activities have their own age limits.",
+ mnemonic:"'18 = adult' — vote, buy alcohol."},
+{topic:"Government",q:"In Scotland, serious criminal cases are heard in the:",opts:["Crown Court","Sheriff Court or High Court of Justiciary","County Court","Magistrates' Court"],answer:1,
+ why:"Scotland has its own legal system: serious cases go to the Sheriff Court (with a jury of 15) or the High Court of Justiciary. Minor cases go to Justice of the Peace Courts.",
+ mnemonic:"'Scotland's Sheriff' — different courts north of the border."},
+{topic:"Government",q:"If you are arrested and questioned by the police, you have the right to:",opts:["Nothing","Free legal advice / a solicitor","Leave immediately","Refuse to be identified forever"],answer:1,
+ why:"Everyone has the right to legal representation. If arrested, you are entitled to free legal advice and to be treated fairly under the law.",
+ mnemonic:"'Arrested? Ask for a solicitor' — free legal advice."},
+{topic:"Government",q:"Discrimination at work because of race, sex, religion or disability is:",opts:["Allowed","Against the law","Only banned in London","Up to the employer"],answer:1,
+ why:"UK law (the Equality Act) makes it illegal to discriminate against someone because of protected characteristics such as race, sex, age, religion, sexuality or disability.",
+ mnemonic:"'Equality Act = fair treatment for all.'"},
+{topic:"Government",q:"National Insurance contributions help pay for:",opts:["Private holidays","State benefits and the NHS/state pension","Football clubs","Shopping vouchers"],answer:1,
+ why:"National Insurance contributions from workers and employers help fund state benefits, the NHS and the State Pension. You need a National Insurance number to work.",
+ mnemonic:"'NI = your stake in the safety net' — pensions, NHS, benefits."},
+{topic:"Government",q:"Everyone who is self-employed in the UK must usually:",opts:["Pay no tax","Complete a Self Assessment tax return","Register with the police","Join a union"],answer:1,
+ why:"Self-employed people report their income and pay tax through Self Assessment to HMRC each year, rather than having tax taken automatically from wages (PAYE).",
+ mnemonic:"'Self-employed = self-assess' your tax."},
+{topic:"Government",q:"A car over three years old in Great Britain must pass which test each year to be roadworthy?",opts:["The MOT test","The census","The GCSE","The DBS check"],answer:0,
+ why:"Cars older than three years must pass an annual MOT test checking safety and roadworthiness. You also need insurance and a valid licence to drive.",
+ mnemonic:"'MOT = Motor OK Test' — yearly for older cars."},
+{topic:"Government",q:"You can help decide court cases fairly if you are chosen to be a:",opts:["Juror","Judge","Barrister","Police officer"],answer:0,
+ why:"Members of the public may be called for jury service to decide, with other jurors, whether someone is guilty in a criminal trial — an important civic duty.",
+ mnemonic:"'Jury = you, judging the facts' — a citizen's duty."},
+{topic:"Government",q:"Which of these is a way to get involved in how the country is run?",opts:["Standing as a candidate or campaigning","Ignoring all politics","Refusing to register to vote","Never reading the news"],answer:0,
+ why:"You can take part in democracy by voting, joining a party, campaigning, contacting your MP, or even standing for election yourself.",
+ mnemonic:"'Vote, join, campaign, stand' — ways to take part."},
+{topic:"Government",q:"Which UK body has courts as its highest court of appeal for civil cases across the UK?",opts:["The Supreme Court","The House of Lords","The Cabinet","The Privy Council of Wales"],answer:0,
+ why:"The Supreme Court is the highest court of appeal in the UK for civil cases (and criminal cases from England, Wales and NI). It replaced the Law Lords in 2009.",
+ mnemonic:"'Supreme = top of the courts.'"},
+
+/* ====================== EXTRA BATCH 2 ====================== */
+{topic:"UK",q:"The pound sterling is divided into how many pence?",opts:["10","50","100","1000"],answer:2,
+ why:"£1 = 100 pence (p). Coins go up to £2; notes from £5 to £50.",
+ mnemonic:"'A pound of 100 pennies' — like 100 cents."},
+{topic:"UK",q:"Which of these is a British Overseas Territory rather than part of the UK itself?",opts:["Scotland","The Isle of Man","Gibraltar","Cornwall"],answer:2,
+ why:"Gibraltar is a British Overseas Territory. The Channel Islands and Isle of Man are Crown Dependencies — linked to the Crown but not part of the UK.",
+ mnemonic:"'Gibraltar = the Rock overseas' — a territory, not a UK country."},
+{topic:"History",q:"The Romans ruled Britain for approximately how long?",opts:["About 40 years","About 400 years","About 1,000 years","About 100 years"],answer:1,
+ why:"Roman Britain lasted roughly from AD 43 to AD 410 — about 400 years — bringing roads, towns and Latin.",
+ mnemonic:"AD 43 to 410 ≈ 400 years of Rome."},
+{topic:"History",q:"Which people built the first Christian churches and monasteries in Britain, spreading Christianity in the early medieval period?",opts:["Missionaries such as St Augustine and St Columba","The Romans only","The Vikings","The Normans"],answer:0,
+ why:"Christianity spread through missionaries: St Augustine came to England in AD 597; St Columba worked in Scotland (Iona); St Patrick in Ireland.",
+ mnemonic:"'Augustine, Columba, Patrick' — the saints who spread the faith."},
+{topic:"History",q:"The Reformation led to the founding of which national church in England?",opts:["The Roman Catholic Church","The Church of England (Anglican)","The Presbyterian Church","The Methodist Church"],answer:1,
+ why:"The Reformation under Henry VIII created the Protestant Church of England, with the monarch as its head — still the 'established church' today.",
+ mnemonic:"'Church of England = Henry's church' — the Reformation."},
+{topic:"History",q:"Which document listing rights was signed by King John in 1215?",opts:["The Bill of Rights","Magna Carta","The Act of Union","The Domesday Book"],answer:1,
+ why:"Magna Carta ('Great Charter'), 1215, limited the king's power and is seen as an early step towards rights and the rule of law.",
+ mnemonic:"'King John, 1215, Magna Carta' — power limited."},
+{topic:"Society",q:"The established Church of England is also known as the:",opts:["Catholic Church","Anglican Church","Baptist Church","Orthodox Church"],answer:1,
+ why:"The Church of England (the Anglican Church) is the official 'established' church in England; the monarch is its Supreme Governor. In Scotland the national church is the (Presbyterian) Church of Scotland.",
+ mnemonic:"'Anglican = of England' — the established church."},
+{topic:"Society",q:"Which of these is a famous UK music festival?",opts:["Glastonbury","Coachella","Tomorrowland","Burning Man"],answer:0,
+ why:"Glastonbury is one of the UK's most famous music festivals. British music has global influence, from classical composers to bands like The Beatles.",
+ mnemonic:"'Glasto' — mud, music and mayhem in Somerset."},
+{topic:"Society",q:"The 40 days before Easter, observed by many Christians, is called:",opts:["Advent","Lent","Diwali","Ramadan"],answer:1,
+ why:"Lent is the 40-day period of reflection before Easter. It starts on Ash Wednesday, often after 'Pancake Day' (Shrove Tuesday).",
+ mnemonic:"'Lent = lead-up to Easter', starts with pancakes."},
+{topic:"Society",q:"Which UK country's national day is on 17 March, also widely celebrated abroad?",opts:["St Patrick's Day (Northern Ireland/Ireland)","St George's Day","St David's Day","St Andrew's Day"],answer:0,
+ why:"St Patrick's Day (17 March) is the patron saint's day of Ireland and Northern Ireland, celebrated around the world.",
+ mnemonic:"'Patrick paints the world green' — 17 March."},
+{topic:"Government",q:"Northern Ireland's devolved government meets at:",opts:["Holyrood","Stormont","Westminster","The Senedd"],answer:1,
+ why:"The Northern Ireland Assembly meets at Stormont in Belfast. (Holyrood = Scotland; the Senedd = Wales; Westminster = UK Parliament.)",
+ mnemonic:"'Stormont in the North' — NI Assembly."},
+{topic:"Government",q:"Wales's devolved parliament is called the:",opts:["Senedd (Welsh Parliament)","Dáil","Assembly of Lords","Holyrood"],answer:0,
+ why:"The Senedd (Welsh Parliament) in Cardiff makes laws for Wales in devolved areas such as health and education.",
+ mnemonic:"'Senedd sings in Wales' — the Welsh Parliament."},
+{topic:"Government",q:"Who appoints the Prime Minister?",opts:["The public directly","The monarch (inviting the leader who can command a Commons majority)","The House of Lords","The Supreme Court"],answer:1,
+ why:"Formally, the monarch invites the leader of the party (or coalition) with a majority in the Commons to become PM and form a government.",
+ mnemonic:"'Crown invites, Commons decides' — the PM."},
+{topic:"Government",q:"Local services like rubbish collection and schools are run mainly by:",opts:["The monarch","Local councils (local government)","The police","Charities only"],answer:1,
+ why:"Local councils provide many day-to-day services — bins, roads, schools, housing, planning — funded partly by Council Tax and central government.",
+ mnemonic:"'Council collects the bins' — local government."},
+{topic:"Government",q:"Council Tax is a tax paid to fund:",opts:["The Royal Family","Local council services","Foreign aid only","Football clubs"],answer:1,
+ why:"Council Tax is charged on homes to help pay for local services such as rubbish collection, policing and schools.",
+ mnemonic:"'Council Tax funds your council.'"},
+{topic:"Government",q:"A key feature of a free press in the UK is that newspapers can:",opts:["Only print government-approved news","Report and criticise the government within the law","Never mention politics","Only be owned by the state"],answer:1,
+ why:"The UK has a free press: media can report freely and criticise the government, as long as they stay within the law (e.g. libel laws).",
+ mnemonic:"'Free press, free to press the government.'"},
+{topic:"Government",q:"Being a good neighbour and helping in your community is:",opts:["Required by a written law with fines","Encouraged as part of being a good citizen","Only for elected officials","Discouraged"],answer:1,
+ why:"There's no fine for not helping, but taking part — volunteering, supporting neighbours, joining local groups — is strongly encouraged as part of UK values.",
+ mnemonic:"'Good neighbour, good citizen' — pitch in."},
+{topic:"Values",q:"Freedom of religion in the UK means you:",opts:["Must follow the Church of England","Can practise any religion or none","Cannot change religion","Must hide your beliefs"],answer:1,
+ why:"People in the UK are free to practise any religion or none, and to change their religion. Tolerance of different faiths is a core value.",
+ mnemonic:"'Any faith or none' — freedom of religion."}
+];
+
+/* rest of the bank is appended below */
+</script>
+<script id="engineScript">
+/* ================= STATE & PERSISTENCE ================= */
+const KEY='reg_liuk_v1';
+const PASS_MARK=18, EXAM_LEN=24, EXAM_SECS=45*60, PRACTICE_LEN=10;
+QUESTIONS.forEach((q,i)=>q.id=i);
+
+function fresh(){return {xp:0,streak:0,lastDay:null,seen:{},mocks:[],badges:{},answered:0,correct:0};}
+let S; try{S=JSON.parse(localStorage.getItem(KEY))||fresh();}catch(e){S=fresh();}
+for(const k in fresh()) if(!(k in S)) S[k]=fresh()[k];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+const app=document.getElementById('app');
+const $=(s,el=document)=>el.querySelector(s);
+function esc(t){return (t+'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+function levelOf(xp){return 1+Math.floor(xp/100);}
+function sceneFor(topic){return SVG[(TOPICS[topic]||{}).ic]||SVG.mascot;}
+
+/* ================= HEADER / STREAK ================= */
+function today(){return new Date().toISOString().slice(0,10);}
+function touchStreak(){
+  const t=today();
+  if(S.lastDay===t) return;
+  const y=new Date(Date.now()-864e5).toISOString().slice(0,10);
+  S.streak = (S.lastDay===y)? S.streak+1 : 1;
+  S.lastDay=t; save();
+}
+function paintHeader(){
+  $('#lvl').textContent='Lv '+levelOf(S.xp);
+  $('#xp').textContent=S.xp;
+  $('#streak').textContent=S.streak;
+}
+
+/* ================= BADGES ================= */
+const BADGES=[
+  {id:'first',   e:'👣', name:'First Steps', test:s=>s.answered>=1},
+  {id:'ten',     e:'🔟', name:'Ten Correct', test:s=>s.correct>=10},
+  {id:'fifty',   e:'⭐', name:'Half Century', test:s=>s.correct>=50},
+  {id:'century', e:'💯', name:'Ton Up (100)', test:s=>s.correct>=100},
+  {id:'sharp',   e:'🎯', name:'Perfect Set', test:s=>!!s.badges.sharp},
+  {id:'mockpass',e:'🎓', name:'Mock Passed', test:s=>s.mocks.some(m=>m.score>=PASS_MARK)},
+  {id:'ace',     e:'👑', name:'Mock Ace 90%+', test:s=>s.mocks.some(m=>m.score>=Math.ceil(EXAM_LEN*0.9))},
+  {id:'streak3', e:'🔥', name:'3-Day Streak', test:s=>s.streak>=3},
+  {id:'ready',   e:'✅', name:'Exam Ready', test:s=>readiness().ready}
+];
+function checkBadges(){
+  const newly=[];
+  BADGES.forEach(b=>{ if(!S.badges[b.id] && b.test(S)){ S.badges[b.id]=true; newly.push(b);} });
+  if(newly.length){ save(); newly.forEach((b,i)=>setTimeout(()=>toast('🏆 Badge unlocked: '+b.name+' '+b.e),i*900)); }
+}
+let toastT;
+function toast(msg){
+  const el=$('#toast'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),2600);
+}
+
+/* ================= READINESS ESTIMATE ================= */
+function readiness(){
+  const ids=Object.keys(S.seen);
+  const coverage=ids.length;                       // unique questions seen
+  let seenCorrect=0, seenTotal=0;
+  ids.forEach(id=>{const r=S.seen[id]; seenCorrect+=r.c; seenTotal+=r.n;});
+  const seenAcc = seenTotal? seenCorrect/seenTotal : 0;
+  const recent = S.mocks.slice(-3);
+  const mockAvg = recent.length? recent.reduce((a,m)=>a+m.score/EXAM_LEN,0)/recent.length : 0;
+  const passes = S.mocks.filter(m=>m.score>=PASS_MARK).length;
+  // blended score; if no mocks yet, lean on practice accuracy but cap
+  let score;
+  if(recent.length===0){ score = Math.min(0.7, seenAcc); }
+  else { score = 0.6*mockAvg + 0.4*seenAcc; }
+  // coverage penalty (need to have seen a good chunk of the 150+ bank)
+  const covFactor = Math.min(1, coverage/80);
+  score = score*covFactor;
+  const pct=Math.round(score*100);
+  const ready = pct>=85 && passes>=2 && coverage>=80;
+  let label,emoji;
+  if(ready){label='Exam ready';emoji='✅';}
+  else if(pct>=70){label='Almost there';emoji='💪';}
+  else if(pct>=50){label='Getting warmer';emoji='🌤️';}
+  else {label='Keep practising';emoji='📚';}
+  return {pct,ready,label,emoji,coverage,seenAcc,mockAvg,passes,mocks:S.mocks.length};
+}
+function readinessAdvice(r){
+  if(r.ready) return "You're consistently passing mocks with strong coverage. Book it. Keep one mock a day ticking over so you stay sharp.";
+  const tips=[];
+  if(r.coverage<80) tips.push("see more of the bank — you've covered "+r.coverage+" of "+QUESTIONS.length+" questions");
+  if(r.passes<2) tips.push("pass at least 2 full mock exams (you have "+r.passes+")");
+  if(r.seenAcc<0.85) tips.push("push practice accuracy above 85% (currently "+Math.round(r.seenAcc*100)+"%)");
+  if(r.mocks===0) tips.push("take your first mock exam to calibrate");
+  return "Not yet. To get to 'ready': "+tips.join("; ")+".";
+}
+
+/* ================= NAV ================= */
+function go(screen,arg){ paintHeader(); ({home:homeScreen,topics:topicsScreen,flashpick:flashPickScreen,progress:progressScreen,badges:badgesScreen})[screen](arg); window.scrollTo(0,0);}
+
+/* ================= HOME ================= */
+function homeScreen(){
+  const r=readiness();
+  app.innerHTML=`
+  <div class="card" style="text-align:center">
+    <div class="scene">${SVG.mascot}</div>
+    <h1>Reg's Life in the UK Quest</h1>
+    <p class="sub">Pass the 2026 test for ILR — with mnemonics, cartoons &amp; mock exams. I'll tell you when you're exam-ready.</p>
+    <div class="progresslabel"><span>Exam readiness</span><span>${r.emoji} ${r.label} · ${r.pct}%</span></div>
+    <div class="readybar"><i style="width:${r.pct}%"></i></div>
+  </div>
+  <div class="menu">
+    <button class="mtile" onclick="startPractice('all')"><span class="ic">${SVG.society}</span><span><b>⚡ Quick Practice</b><span>10 mixed questions, instant feedback</span></span></button>
+    <button class="mtile" onclick="go('topics')"><span class="ic">${SVG.history}</span><span><b>📚 Practice by Topic</b><span>Target your weak areas</span></span></button>
+    <button class="mtile" onclick="go('flashpick')"><span class="ic">${SVG.values}</span><span><b>🧠 Mnemonic Flashcards</b><span>Memorise dates &amp; names fast</span></span></button>
+    <button class="mtile" onclick="startExam()"><span class="ic">${SVG.government}</span><span><b>🎓 Mock Exam</b><span>24 questions · 45 min · pass = 18</span></span></button>
+    <button class="mtile" onclick="go('progress')"><span class="ic">${SVG.uk}</span><span><b>📊 Progress &amp; Readiness</b><span>Am I ready for the real test?</span></span></button>
+    <button class="mtile" onclick="go('badges')"><span class="ic">${SVG.mascot}</span><span><b>🏆 Badges</b><span>${Object.keys(S.badges).length}/${BADGES.length} unlocked</span></span></button>
+  </div>`;
+}
+
+/* ================= TOPIC PICKERS ================= */
+function topicCounts(topic){
+  const list=QUESTIONS.filter(q=>q.topic===topic);
+  let seen=0,correct=0;
+  list.forEach(q=>{const r=S.seen[q.id]; if(r){seen++; if(r.c>0)correct++;}});
+  return {total:list.length,seen,correct};
+}
+function topicsScreen(){
+  app.innerHTML=`<div class="card"><h2>Practice by topic</h2><p class="sub">Pick a chapter. 10 questions per round, prioritising ones you haven't nailed yet.</p>
+   <div class="chips">${Object.keys(TOPICS).map(t=>{const c=topicCounts(t);
+     return `<button class="chip" onclick="startPractice('${t}')"><span class="ic">${sceneFor(t)}</span><span>${TOPICS[t].name}<small>${c.total} questions · seen ${c.seen}</small></span></button>`;}).join('')}
+   </div>
+   <div class="row"><button class="btn ghost small" onclick="go('home')">← Back</button></div></div>`;
+}
+function flashPickScreen(){
+  app.innerHTML=`<div class="card"><h2>🧠 Mnemonic flashcards</h2><p class="sub">Study mode — no scoring. Read the question, guess, then flip for the answer and its memory hook.</p>
+   <div class="chips"><button class="chip" onclick="startFlash('all')"><span class="ic">${SVG.mascot}</span><span>All topics<small>${QUESTIONS.length} cards</small></span></button>
+   ${Object.keys(TOPICS).map(t=>`<button class="chip" onclick="startFlash('${t}')"><span class="ic">${sceneFor(t)}</span><span>${TOPICS[t].name}<small>${topicCounts(t).total} cards</small></span></button>`).join('')}
+   </div><div class="row"><button class="btn ghost small" onclick="go('home')">← Back</button></div></div>`;
+}
+
+/* ================= PRACTICE ================= */
+let sess=null;
+function pool(topic){return shuffle(QUESTIONS.filter(q=>topic==='all'||q.topic===topic).slice());}
+function prioritise(list){
+  return list.sort((a,b)=>{
+    const ra=S.seen[a.id],rb=S.seen[b.id];
+    const wa=!ra?0:(ra.c>0?2:1), wb=!rb?0:(rb.c>0?2:1); // unseen(0) < wrong-before(1) < correct(2)
+    return wa-wb;
+  });
+}
+function startPractice(topic){
+  touchStreak();
+  const items=prioritise(pool(topic)).slice(0,PRACTICE_LEN);
+  sess={mode:'practice',topic,items,idx:0,correct:0};
+  paintHeader(); renderQ();
+}
+function startFlash(topic){
+  const items=shuffle(pool(topic));
+  sess={mode:'flash',topic,items,idx:0,flip:false};
+  renderCard();
+}
+
+function renderQ(){
+  const q=sess.items[sess.idx];
+  const n=sess.items.length;
+  app.innerHTML=`
+  <div class="card">
+    <div class="qmeta"><span>${TOPICS[q.topic].emoji} ${TOPICS[q.topic].name}</span><span>Question ${sess.idx+1} / ${n}</span></div>
+    <div class="xpbar"><i style="width:${(sess.idx)/n*100}%"></i></div>
+    <div class="scene">${sceneFor(q.topic)}</div>
+    <div class="qtext">${esc(q.q)}</div>
+    <div class="opts" id="opts">
+      ${q.opts.map((o,k)=>`<button class="opt" data-k="${k}" onclick="answer(${k})"><span class="k">${'ABCD'[k]}</span><span>${esc(o)}</span></button>`).join('')}
+    </div>
+    <div id="feedback"></div>
+  </div>`;
+}
+function answer(k){
+  const q=sess.items[sess.idx];
+  const correct = k===q.answer;
+  // lock options + colour
+  [...document.querySelectorAll('#opts .opt')].forEach(btn=>{
+    const bk=+btn.dataset.k; btn.disabled=true;
+    if(bk===q.answer) btn.classList.add('correct');
+    else if(bk===k) btn.classList.add('wrong');
+  });
+  // record
+  const r=S.seen[q.id]||{c:0,n:0}; r.n++; if(correct)r.c++; S.seen[q.id]=r;
+  S.answered++; if(correct){S.correct++; sess.correct++; S.xp+=10;} else {S.xp+=2;}
+  save(); paintHeader(); checkBadges();
+  const last = sess.idx===sess.items.length-1;
+  $('#feedback').innerHTML=`
+    <div class="explain ${correct?'ok':'no'}">
+      <h3>${correct?'✅ Correct! (+10 XP)':'❌ Not quite. (+2 XP for trying)'}</h3>
+      <div><b>Answer:</b> ${'ABCD'[q.answer]} — ${esc(q.opts[q.answer])}</div>
+      <div class="todo"><b>Why / what to do:</b> ${esc(q.why)}</div>
+      <div class="mnem"><b>🧠 Remember it:</b> ${esc(q.mnemonic)}</div>
+      ${q.reality?`<div class="reality"><b>⚠️ 2026 reality check:</b> ${esc(q.reality)}</div>`:''}
+    </div>
+    <div class="row">
+      <button class="btn ${last?'green':'blue'}" onclick="${last?'finishPractice()':'nextQ()'}">${last?'See results →':'Next question →'}</button>
+      <button class="btn ghost" onclick="quitToHome()">Quit</button>
+    </div>`;
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+function nextQ(){sess.idx++; renderQ(); window.scrollTo(0,0);}
+function finishPractice(){
+  const n=sess.items.length, sc=sess.correct, pct=Math.round(sc/n*100);
+  if(pct===100 && n>=PRACTICE_LEN && !S.badges.sharp){S.badges.sharp=true;save();}
+  checkBadges();
+  const r=readiness();
+  app.innerHTML=`<div class="card" style="text-align:center">
+    <div class="result-emoji">${pct>=80?'🎉':pct>=50?'👍':'💪'}</div>
+    <h2>${sc} / ${n} correct</h2>
+    <div class="big">${pct}%</div>
+    <p class="sub">${pct>=80?"Strong round.":pct>=50?"Decent — review the ones you missed.":"Keep going, repetition wins."}</p>
+    <div class="progresslabel"><span>Overall readiness now</span><span>${r.emoji} ${r.label} · ${r.pct}%</span></div>
+    <div class="readybar"><i style="width:${r.pct}%"></i></div>
+    <div class="row" style="justify-content:center">
+      <button class="btn" onclick="startPractice('${sess.topic}')">Another round</button>
+      <button class="btn blue" onclick="startExam()">Try a mock exam</button>
+      <button class="btn ghost" onclick="go('home')">Home</button>
+    </div></div>`;
+}
+function quitToHome(){sess=null; go('home');}
+
+/* ================= FLASHCARDS ================= */
+function renderCard(){
+  const q=sess.items[sess.idx], n=sess.items.length;
+  app.innerHTML=`<div class="card">
+    <div class="qmeta"><span>${TOPICS[q.topic].emoji} ${TOPICS[q.topic].name}</span><span>Card ${sess.idx+1} / ${n}</span></div>
+    <div class="scene">${sceneFor(q.topic)}</div>
+    <div class="qtext">${esc(q.q)}</div>
+    ${sess.flip?`<div class="explain ok"><div><b>Answer:</b> ${esc(q.opts[q.answer])}</div>
+        <div class="mnem"><b>🧠 Remember it:</b> ${esc(q.mnemonic)}</div>
+        ${q.reality?`<div class="reality"><b>⚠️ 2026 reality check:</b> ${esc(q.reality)}</div>`:''}</div>`
+      :`<p class="sub">Think of your answer…</p>`}
+    <div class="row">
+      ${sess.flip?`<button class="btn blue" onclick="flashNext()">${sess.idx===n-1?'Finish':'Next card →'}</button>`
+                 :`<button class="btn" onclick="flashFlip()">Flip card 🔄</button>`}
+      <button class="btn ghost" onclick="quitToHome()">Done</button>
+    </div></div>`;
+}
+function flashFlip(){sess.flip=true; renderCard();}
+function flashNext(){ if(sess.idx===sess.items.length-1){toast('🧠 Deck complete!'); go('home'); return;} sess.idx++; sess.flip=false; renderCard(); window.scrollTo(0,0);}
+
+/* ================= MOCK EXAM ================= */
+let exam=null, examTimer=null;
+function startExam(){
+  touchStreak();
+  const items=shuffle(QUESTIONS.slice()).slice(0,EXAM_LEN);
+  exam={items,idx:0,answers:new Array(EXAM_LEN).fill(null),endAt:Date.now()+EXAM_SECS*1000};
+  clearInterval(examTimer);
+  examTimer=setInterval(tick,1000);
+  renderExam();
+}
+function tick(){
+  const left=Math.max(0,Math.round((exam.endAt-Date.now())/1000));
+  const el=$('#timer'); if(el){const m=String(Math.floor(left/60)).padStart(2,'0'),s=String(left%60).padStart(2,'0');el.textContent=m+':'+s; el.classList.toggle('warn',left<=120);}
+  if(left<=0){clearInterval(examTimer); gradeExam(true);}
+}
+function renderExam(){
+  const q=exam.items[exam.idx], picked=exam.answers[exam.idx];
+  app.innerHTML=`<div class="card">
+    <div class="examhead">
+      <span class="pill">🎓 Mock Exam</span>
+      <span class="timer" id="timer">45:00</span>
+      <span class="pill">${exam.idx+1} / ${EXAM_LEN}</span>
+    </div>
+    <div class="xpbar"><i style="width:${(exam.answers.filter(a=>a!==null).length)/EXAM_LEN*100}%"></i></div>
+    <div class="qtext" style="margin-top:14px">${esc(q.q)}</div>
+    <div class="opts" id="opts">
+      ${q.opts.map((o,k)=>`<button class="opt ${picked===k?'multi sel':''}" onclick="pick(${k})"><span class="k">${'ABCD'[k]}</span><span>${esc(o)}</span></button>`).join('')}
+    </div>
+    <div class="row">
+      <button class="btn ghost small" onclick="examNav(-1)" ${exam.idx===0?'disabled':''}>← Prev</button>
+      ${exam.idx<EXAM_LEN-1?`<button class="btn blue small" onclick="examNav(1)">Next →</button>`
+        :`<button class="btn green" onclick="gradeExam(false)">Submit exam</button>`}
+      <button class="btn small" onclick="gradeExam(false)">Finish &amp; grade</button>
+    </div>
+    <p class="todo" style="margin-top:10px">No feedback until the end — just like the real test. Answered ${exam.answers.filter(a=>a!==null).length}/${EXAM_LEN}.</p>
+  </div>`;
+  tick();
+}
+function pick(k){exam.answers[exam.idx]=k; renderExam();}
+function examNav(d){exam.idx=Math.min(EXAM_LEN-1,Math.max(0,exam.idx+d)); renderExam(); window.scrollTo(0,0);}
+function gradeExam(timeUp){
+  clearInterval(examTimer);
+  let sc=0; exam.items.forEach((q,i)=>{ if(exam.answers[i]===q.answer)sc++; });
+  const pass=sc>=PASS_MARK, pct=Math.round(sc/EXAM_LEN*100);
+  // record
+  exam.items.forEach((q,i)=>{const r=S.seen[q.id]||{c:0,n:0}; r.n++; if(exam.answers[i]===q.answer)r.c++; S.seen[q.id]=r;});
+  S.answered+=EXAM_LEN; S.correct+=sc; S.xp += sc*10 + (pass?50:0);
+  S.mocks.push({date:today(),score:sc}); save(); paintHeader(); checkBadges();
+  const r=readiness();
+  const wrong=exam.items.map((q,i)=>({q,i})).filter(x=>exam.answers[x.i]!==x.q.answer);
+  app.innerHTML=`<div class="card" style="text-align:center">
+    <div class="result-emoji">${pass?'🎉':'😬'}</div>
+    <h2>${pass?'PASS':'Not passed'} ${timeUp?'(time up)':''}</h2>
+    <div class="big">${sc}/${EXAM_LEN}</div>
+    <p class="sub">${pct}% — real test pass mark is ${PASS_MARK}/${EXAM_LEN} (75%). ${pass?'+50 bonus XP 🏅':''}</p>
+    <div class="progresslabel"><span>Exam readiness</span><span>${r.emoji} ${r.label} · ${r.pct}%</span></div>
+    <div class="readybar"><i style="width:${r.pct}%"></i></div>
+    <p class="todo" style="margin-top:14px">${esc(readinessAdvice(r))}</p>
+    <div class="row" style="justify-content:center">
+      <button class="btn" onclick="startExam()">Retake mock</button>
+      <button class="btn blue" onclick="go('progress')">My progress</button>
+      <button class="btn ghost" onclick="go('home')">Home</button>
+    </div>
+  </div>
+  ${wrong.length?`<div class="card"><h3 style="margin-top:0">Review the ${wrong.length} you missed</h3>
+    ${wrong.map(x=>`<div class="explain no" style="margin-bottom:12px">
+       <div class="qtext" style="font-size:16px">${esc(x.q.q)}</div>
+       <div><b>Correct:</b> ${esc(x.q.opts[x.q.answer])}${exam.answers[x.i]!=null?` · <span style="color:var(--bad)">You: ${esc(x.q.opts[exam.answers[x.i]])}</span>`:' · <span style="color:var(--muted)">(left blank)</span>'}</div>
+       <div class="todo"><b>Why:</b> ${esc(x.q.why)}</div>
+       <div class="mnem"><b>🧠</b> ${esc(x.q.mnemonic)}</div>
+       ${x.q.reality?`<div class="reality"><b>⚠️</b> ${esc(x.q.reality)}</div>`:''}
+    </div>`).join('')}</div>`:''}`;
+  window.scrollTo(0,0);
+}
+
+/* ================= PROGRESS ================= */
+function progressScreen(){
+  const r=readiness();
+  const lvl=levelOf(S.xp), inLvl=S.xp%100;
+  const byTopic=Object.keys(TOPICS).map(t=>{const c=topicCounts(t);const acc=c.seen?Math.round(c.correct/c.seen*100):0;return {t,c,acc};});
+  app.innerHTML=`<div class="card">
+    <h2>📊 Progress &amp; readiness</h2>
+    <div class="progresslabel"><span>Level ${lvl}</span><span>${S.xp} XP</span></div>
+    <div class="xpbar"><i style="width:${inLvl}%"></i></div>
+    <p class="sub" style="margin-top:8px">🔥 ${S.streak}-day streak · ✅ ${S.correct} correct of ${S.answered} answered · 🎓 ${S.mocks.length} mock(s) taken</p>
+    <div class="progresslabel" style="margin-top:14px"><span>Am I exam ready?</span><span>${r.emoji} ${r.label} · ${r.pct}%</span></div>
+    <div class="readybar"><i style="width:${r.pct}%"></i></div>
+    <p class="todo" style="margin-top:12px">${esc(readinessAdvice(r))}</p>
+  </div>
+  <div class="card"><h3 style="margin-top:0">Accuracy by topic</h3>
+    ${byTopic.map(o=>`<div class="progresslabel" style="margin-top:10px"><span>${TOPICS[o.t].emoji} ${TOPICS[o.t].name}</span><span>${o.c.seen?o.acc+'%':'—'} · seen ${o.c.seen}/${o.c.total}</span></div>
+      <div class="xpbar"><i style="width:${o.acc}%"></i></div>`).join('')}
+  </div>
+  ${S.mocks.length?`<div class="card"><h3 style="margin-top:0">Mock exam history</h3>
+     ${S.mocks.slice(-8).reverse().map(m=>`<div class="progresslabel"><span>${m.date}</span><span>${m.score>=PASS_MARK?'✅ PASS':'❌'} ${m.score}/${EXAM_LEN}</span></div>`).join('')}</div>`:''}
+  <div class="card" style="text-align:center">
+    <div class="row" style="justify-content:center">
+      <button class="btn blue" onclick="startExam()">Take a mock</button>
+      <button class="btn ghost" onclick="go('home')">Home</button>
+      <button class="btn ghost small" onclick="resetAll()">Reset progress</button>
+    </div>
+  </div>`;
+}
+function resetAll(){ if(confirm('Reset all XP, streaks, badges and history? This cannot be undone.')){S=fresh();save();paintHeader();go('home');toast('Progress reset');} }
+
+/* ================= BADGES ================= */
+function badgesScreen(){
+  app.innerHTML=`<div class="card"><h2>🏆 Badges</h2><p class="sub">${Object.keys(S.badges).length} of ${BADGES.length} unlocked. Earn them by practising, passing mocks and keeping your streak.</p>
+   <div class="bgrid">${BADGES.map(b=>`<div class="bcell ${S.badges[b.id]?'on':''}"><div class="be">${b.e}</div><small>${b.name}</small></div>`).join('')}</div>
+   <div class="row"><button class="btn ghost small" onclick="go('home')">← Back</button></div></div>`;
+}
+
+/* ================= BOOT ================= */
+window.startPractice=startPractice;window.startFlash=startFlash;window.startExam=startExam;
+window.answer=answer;window.nextQ=nextQ;window.finishPractice=finishPractice;window.quitToHome=quitToHome;
+window.flashFlip=flashFlip;window.flashNext=flashNext;window.pick=pick;window.examNav=examNav;window.gradeExam=gradeExam;
+window.go=go;window.resetAll=resetAll;
+paintHeader(); go('home');
+</script>
+</body>
+</html>

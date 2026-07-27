@@ -1,0 +1,12 @@
+{
+  "name": "reg-life-in-uk-quest",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reg's Life in the UK Quest - gamified ILR test practice",
+  "scripts": {
+    "start": "serve . -l tcp://0.0.0.0:${PORT:-3000}"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  }
+}
