@@ -233,6 +233,21 @@ const SVG = {
     <rect x="74" y="46" width="14" height="10" fill="#3f6fd0"/>
     <rect x="78" y="60" width="6" height="6" fill="#fff"/>
     <path d="M69 60 l4 4 8 -8" stroke="#fff" stroke-width="2" fill="none"/>
+  </svg>`,
+
+  sports:`<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 20 l10 26 M70 20 l-10 26" stroke="#5b8def" stroke-width="6"/>
+    <circle cx="60" cy="64" r="22" fill="#ffd23f" stroke="#c99400" stroke-width="3"/>
+    <polygon points="60,52 64,62 74,62 66,69 69,79 60,73 51,79 54,69 46,62 56,62" fill="#c99400"/>
+  </svg>`,
+
+  courts:`<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+    <rect x="58" y="26" width="4" height="52" fill="#8a93cf"/>
+    <rect x="42" y="78" width="36" height="6" rx="2" fill="#8a93cf"/>
+    <path d="M60 30 H30 M60 30 H90" stroke="#8a93cf" stroke-width="3"/>
+    <path d="M30 30 l-9 17 h18 z" fill="#ffd23f" stroke="#c99400" stroke-width="1.5"/>
+    <path d="M90 30 l-9 17 h18 z" fill="#ffd23f" stroke="#c99400" stroke-width="1.5"/>
+    <circle cx="60" cy="24" r="5" fill="#ffd23f" stroke="#c99400"/>
   </svg>`
 };
 document.getElementById('logoSvg').innerHTML = SVG.mascot;
@@ -242,7 +257,9 @@ const TOPICS = {
   UK:{name:"What is the UK", ic:"uk", emoji:"🇬🇧"},
   History:{name:"A Long History", ic:"history", emoji:"🏰"},
   Society:{name:"Modern Society", ic:"society", emoji:"🎭"},
-  Government:{name:"Government & Law", ic:"government", emoji:"🏛️"}
+  Government:{name:"Government & Law", ic:"government", emoji:"🏛️"},
+  Sports:{name:"Sports: People & Achievements", ic:"sports", emoji:"🏅"},
+  Courts:{name:"Courts & Law", ic:"courts", emoji:"⚖️"}
 };
 
 /* ---------- QUESTION BANK ---------- */
@@ -1014,18 +1031,11 @@ const QUESTIONS = [
 {topic:"Government",q:"The Council of Europe is mainly responsible for:",opts:["Human rights across Europe","Setting UK taxes","Running the UK courts","The UK's railways"],answer:0,
  why:"The Council of Europe protects human rights and is responsible for the European Convention on Human Rights (ECHR). It is not the same as the EU.",
  mnemonic:"Council of Europe = human rights (the ECHR)."},
-{topic:"Government",q:"The age of criminal responsibility in England, Wales and Northern Ireland is:",opts:["10","14","18","21"],answer:0,
- why:"Children can be charged with a criminal offence from age 10 in England, Wales and Northern Ireland (it is higher in Scotland).",
- mnemonic:"'Ten to be tried' — age of criminal responsibility."},
-{topic:"Government",q:"A Youth Court deals with young people aged:",opts:["10 to 17","18 to 25","5 to 9","Any age"],answer:0,
- why:"Youth Courts deal with defendants aged 10 to 17; they are less formal and the public are not admitted.",
- mnemonic:"Youth Court = 10 to 17."},
+/* criminal responsibility & Youth Court moved to the Courts topic */
 {topic:"Government",q:"Minor civil disputes over small amounts of money are usually handled by:",opts:["The small claims procedure","The Crown Court","A jury of 12","The House of Lords"],answer:0,
  why:"The small claims procedure (in the County Court) handles minor civil disputes over relatively small sums, without needing a solicitor.",
  mnemonic:"Small money = small claims."},
-{topic:"Government",q:"'Legal aid' is:",opts:["Help with the cost of legal advice or representation","A tax on lawyers","A type of jury","A political party"],answer:0,
- why:"Legal aid can help people who cannot afford it to pay for legal advice or representation.",
- mnemonic:"Legal aid = help paying for the law."},
+/* legal aid moved to the Courts topic */
 {topic:"Government",q:"If you need legal advice or someone to represent you in court, you would usually see a:",opts:["Solicitor","Whip","Speaker","Sheriff"],answer:0,
  why:"Solicitors give legal advice and can represent people; for serious cases a barrister/advocate may also be used.",
  mnemonic:"Need the law explained? See a solicitor."},
@@ -1049,7 +1059,131 @@ const QUESTIONS = [
  mnemonic:"Crown opens Parliament = State Opening."},
 {topic:"Government",q:"Which of these is a way a citizen can take part in public life?",opts:["Standing for election as a local councillor","Refusing to pay any tax","Ignoring jury summons","Damaging the environment"],answer:0,
  why:"Citizens can get involved by voting, standing as a councillor or MP, joining a party, volunteering, or becoming a school governor.",
- mnemonic:"Stand, serve, volunteer — take part."}
+ mnemonic:"Stand, serve, volunteer — take part."},
+
+/* ===== SPORTS: PEOPLE & ACHIEVEMENTS ===== */
+{topic:"Sports",q:"In 1954, Sir Roger Bannister became the first person to:",opts:["Win Wimbledon","Run a mile in under four minutes","Sail solo around the world","Win Olympic rowing gold"],answer:1,
+ why:"On 6 May 1954, Sir Roger Bannister ran the first sub-four-minute mile.",
+ mnemonic:"'Bannister broke the barrier' — 4-min mile, 1954."},
+{topic:"Sports",q:"Bobby Moore is famous for captaining the England team that won the 1966:",opts:["Rugby World Cup","Cricket World Cup","FIFA (football) World Cup","Olympic hockey"],answer:2,
+ why:"Bobby Moore captained England to victory in the 1966 football World Cup, held at Wembley.",
+ mnemonic:"'Moore lifted the cup in '66' — football."},
+{topic:"Sports",q:"Sir Steve Redgrave won Olympic gold at five consecutive Games in which sport?",opts:["Rowing","Cycling","Sailing","Athletics"],answer:0,
+ why:"Sir Steve Redgrave won rowing gold at five consecutive Olympic Games (1984–2000).",
+ mnemonic:"Redgrave's five golds, five Games — rowing."},
+{topic:"Sports",q:"Jayne Torvill and Christopher Dean won Olympic gold in 1984 for:",opts:["Ice dancing (figure skating)","Synchronised swimming","Gymnastics","Diving"],answer:0,
+ why:"Torvill and Dean won ice-dancing gold at the 1984 Winter Olympics, famously scoring perfect marks for their 'Boléro' routine.",
+ mnemonic:"Torvill & Dean glide to gold — ice dancing, '84."},
+{topic:"Sports",q:"Dame Kelly Holmes won two gold medals at the 2004 Olympics in which sport?",opts:["Running (800m & 1500m)","Swimming","Cycling","Rowing"],answer:0,
+ why:"Dame Kelly Holmes won gold in both the 800m and 1500m at the Athens 2004 Olympics.",
+ mnemonic:"Holmes = a double-gold runner, 2004."},
+{topic:"Sports",q:"Sir Chris Hoy is one of Britain's most successful Olympians in which sport?",opts:["Track cycling","Boxing","Judo","Fencing"],answer:0,
+ why:"Sir Chris Hoy, a Scottish track cyclist, won six Olympic gold medals.",
+ mnemonic:"Hoy = gold on the velodrome — cycling."},
+{topic:"Sports",q:"Dame Ellen MacArthur made history in 2005 for:",opts:["The fastest solo sail around the world","Winning the London Marathon","Climbing Everest","Winning Formula 1"],answer:0,
+ why:"In 2005, Dame Ellen MacArthur set the record for the fastest solo sailing voyage around the world.",
+ mnemonic:"MacArthur alone at sea — round-the-world record, 2005."},
+{topic:"Sports",q:"Sir Francis Chichester is remembered as one of the first people to:",opts:["Sail single-handed around the world (1966–67)","Fly across the Atlantic","Run a marathon","Win the Ashes"],answer:0,
+ why:"Sir Francis Chichester sailed single-handed around the world in 1966–67.",
+ mnemonic:"Chichester's solo circle of the globe, 1966–67."},
+{topic:"Sports",q:"Sir Ian Botham is a famous British sportsman in which sport?",opts:["Cricket","Golf","Tennis","Rowing"],answer:0,
+ why:"Sir Ian Botham captained the England cricket team and was a celebrated all-rounder, once holding the record for the most Test wickets.",
+ mnemonic:"'Beefy' Botham = England cricket legend."},
+{topic:"Sports",q:"Sir Jackie Stewart was a British world champion in which sport?",opts:["Formula 1 motor racing","Horse racing","Cycling","Boxing"],answer:0,
+ why:"Sir Jackie Stewart, from Scotland, was a three-time Formula 1 world champion.",
+ mnemonic:"Stewart = Scottish speed king, Formula 1."},
+{topic:"Sports",q:"At the London 2012 Olympics, Mo Farah won gold in:",opts:["The 5,000m and 10,000m","Swimming","Cycling","The long jump"],answer:0,
+ why:"Mo Farah won the 5,000m and 10,000m long-distance running golds at London 2012.",
+ mnemonic:"Farah far and fast — 5k & 10k, 2012."},
+{topic:"Sports",q:"Jessica Ennis won gold at London 2012 in which event?",opts:["The heptathlon","The marathon","The high jump only","Swimming"],answer:0,
+ why:"Jessica Ennis(-Hill) won the heptathlon (seven athletics events) at the London 2012 Olympics.",
+ mnemonic:"Ennis = seven events, one gold — heptathlon."},
+{topic:"Sports",q:"In 2012, Sir Bradley Wiggins became the first Briton to win:",opts:["The Tour de France","Wimbledon","The Open golf","The Grand National"],answer:0,
+ why:"Sir Bradley Wiggins was the first Briton to win the Tour de France (2012); he also won Olympic gold that year.",
+ mnemonic:"Wiggins in yellow — first British Tour winner, 2012."},
+{topic:"Sports",q:"Ellie Simmonds won gold medals for Britain at the 2008 and 2012 Paralympics in:",opts:["Swimming","Wheelchair racing","Cycling","Table tennis"],answer:0,
+ why:"Ellie Simmonds is a Paralympic swimming champion, winning golds at Beijing 2008 (aged 13) and London 2012.",
+ mnemonic:"Simmonds = Paralympic pool golds."},
+{topic:"Sports",q:"David Weir won multiple gold medals at the London 2012 Paralympics in:",opts:["Wheelchair racing","Swimming","Archery","Cycling"],answer:0,
+ why:"David Weir, 'the Weirwolf', won several wheelchair racing golds at the 2012 Paralympics and has won the London Marathon many times.",
+ mnemonic:"Weir wheels to gold — 2012 Paralympics."},
+{topic:"Sports",q:"How many times has London hosted the modern summer Olympic Games?",opts:["Never","Once","Twice","Three times (1908, 1948, 2012)"],answer:3,
+ why:"London has hosted the summer Olympics three times: 1908, 1948 and 2012.",
+ mnemonic:"London's Olympic hat-trick: 1908, 1948, 2012."},
+{topic:"Sports",q:"'The Ashes' is a famous Test series in which sport, between England and Australia?",opts:["Cricket","Rugby","Football","Netball"],answer:0,
+ why:"The Ashes is a historic cricket rivalry between England and Australia.",
+ mnemonic:"Ashes in an urn = cricket, Eng v Aus."},
+{topic:"Sports",q:"The Six Nations Championship is contested in which sport?",opts:["Rugby union","Cricket","Rowing","Hockey"],answer:0,
+ why:"The Six Nations is an annual rugby union competition between England, Scotland, Wales, Ireland, France and Italy.",
+ mnemonic:"Six teams, one oval ball — rugby's Six Nations."},
+{topic:"Sports",q:"The Grand National, a famous horse race, is held at:",opts:["Aintree","Wembley","Wimbledon","Lord's"],answer:0,
+ why:"The Grand National is a celebrated horse race run at Aintree, near Liverpool.",
+ mnemonic:"Grand National gallops at Aintree."},
+{topic:"Sports",q:"'The Open Championship' is a major tournament in which sport that originated in Scotland?",opts:["Golf","Tennis","Snooker","Darts"],answer:0,
+ why:"The Open is one of golf's four majors; golf originated in Scotland (St Andrews is called the home of golf).",
+ mnemonic:"'The Open' = golf's oldest major."},
+
+/* ===== COURTS & LAW ===== */
+{topic:"Courts",q:"In England and Wales, a minor civil dispute over a small amount of money (a 'small claim') is dealt with by the:",opts:["Crown Court","County Court","Magistrates' Court","High Court"],answer:1,
+ why:"Small claims and other civil disputes (like debt or faulty goods) in England and Wales are handled by the County Court, using the small claims procedure — no solicitor needed.",
+ mnemonic:"Small money troubles → County Court (small claims)."},
+{topic:"Courts",q:"In England and Wales, the most serious criminal cases (with a judge and jury) are heard in the:",opts:["Magistrates' Court","County Court","Crown Court","Small Claims Court"],answer:2,
+ why:"Serious criminal cases go to the Crown Court, where a judge and a jury of 12 decide the outcome.",
+ mnemonic:"Serious crime = the Crown Court + jury."},
+{topic:"Courts",q:"In England and Wales, minor criminal cases are usually dealt with in the:",opts:["Magistrates' Court","Crown Court","County Court","Supreme Court"],answer:0,
+ why:"Minor criminal offences are handled by the Magistrates' Court, usually by magistrates (Justices of the Peace) without a jury.",
+ mnemonic:"Minor crime = the Magistrates."},
+{topic:"Courts",q:"Magistrates (Justices of the Peace) in England and Wales are usually:",opts:["Paid, full-time lawyers","Members of the public who are unpaid volunteers","Elected politicians","Police officers"],answer:1,
+ why:"Most magistrates are members of the community who give their time unpaid; they are advised on the law by a legal adviser.",
+ mnemonic:"Magistrates = unpaid volunteers of the community."},
+{topic:"Courts",q:"Civil cases such as debt, personal injury or breach of contract in England and Wales are usually heard in the:",opts:["County Court","Crown Court","Magistrates' Court","High Court of Justiciary"],answer:0,
+ why:"The County Court deals with civil (non-criminal) matters like debts, contracts and personal injury claims.",
+ mnemonic:"Civil disputes → County Court."},
+{topic:"Courts",q:"A Youth Court deals with young people aged:",opts:["10 to 17","18 to 25","5 to 9","Any age"],answer:0,
+ why:"Youth Courts hear cases involving defendants aged 10 to 17; they are less formal and closed to the general public.",
+ mnemonic:"Youth Court = 10 to 17."},
+{topic:"Courts",q:"How many people sit on a jury in England, Wales and Northern Ireland?",opts:["6","10","12","15"],answer:2,
+ why:"A jury has 12 members in England, Wales and Northern Ireland (it is 15 in Scotland).",
+ mnemonic:"'12 good people and true' — England, Wales, NI."},
+{topic:"Courts",q:"In Scotland, minor criminal cases are heard in the:",opts:["Justice of the Peace Court","Magistrates' Court","County Court","Crown Court"],answer:0,
+ why:"Scotland has its own system: minor criminal cases go to the Justice of the Peace Court.",
+ mnemonic:"Scotland's small crimes → Justice of the Peace Court."},
+{topic:"Courts",q:"In Scotland, serious criminal cases are heard in the Sheriff Court or the:",opts:["High Court of Justiciary","Crown Court","County Court","Supreme Court of England"],answer:0,
+ why:"Serious criminal cases in Scotland are heard in the Sheriff Court (with a jury of 15) or the High Court of Justiciary.",
+ mnemonic:"Scotland's serious crime → Sheriff / High Court of Justiciary."},
+{topic:"Courts",q:"How many people sit on a jury in Scotland?",opts:["12","15","8","20"],answer:1,
+ why:"A Scottish criminal jury has 15 members (compared with 12 in the rest of the UK).",
+ mnemonic:"Scotland's jury = 15 (three more than the rest)."},
+{topic:"Courts",q:"The highest court of appeal in the UK is the:",opts:["Supreme Court","Crown Court","Magistrates' Court","County Court"],answer:0,
+ why:"The Supreme Court is the highest court of appeal in the UK; it replaced the Law Lords in 2009.",
+ mnemonic:"'Supreme = top of the courts.'"},
+{topic:"Courts",q:"The age of criminal responsibility in England, Wales and Northern Ireland is:",opts:["10","14","16","18"],answer:0,
+ why:"Children can be charged with a crime from the age of 10 in England, Wales and Northern Ireland (it is higher in Scotland).",
+ mnemonic:"'Ten to be tried' in England, Wales & NI."},
+{topic:"Courts",q:"'Legal aid' is:",opts:["Help with the cost of legal advice or representation","A type of jury","A tax on lawyers","A police unit"],answer:0,
+ why:"Legal aid can help people who cannot afford it to pay for legal advice or representation in court.",
+ mnemonic:"Legal aid = help paying for the law."},
+{topic:"Courts",q:"If you need legal advice or someone to represent you, you would usually first see a:",opts:["Solicitor","Magistrate","Whip","Coroner"],answer:0,
+ why:"Solicitors give legal advice and can represent people in court; barristers/advocates often handle serious cases in the higher courts.",
+ mnemonic:"Need the law? Start with a solicitor."},
+{topic:"Courts",q:"Judges in the UK must be:",opts:["Independent of the government","Elected by the public","Members of the Cabinet","Appointed by the police"],answer:0,
+ why:"The judiciary must be independent of government — a key part of the rule of law.",
+ mnemonic:"'Judges judge free' — independent of politics."},
+{topic:"Courts",q:"In a criminal trial in the UK, the accused person is:",opts:["Guilty until they prove otherwise","Innocent until proven guilty","Automatically convicted","Judged by the police"],answer:1,
+ why:"A core principle of UK justice is that a person is innocent until proven guilty.",
+ mnemonic:"Innocent first — the burden is on the prosecution."},
+{topic:"Courts",q:"In a Crown Court trial, who decides whether the accused is guilty?",opts:["The jury","The Prime Minister","The Speaker","The police"],answer:0,
+ why:"In the Crown Court, a jury of 12 members of the public decides guilt, and the judge decides the sentence.",
+ mnemonic:"Jury decides guilt; judge decides the sentence."},
+{topic:"Courts",q:"Police and Crime Commissioners (in England and Wales) are:",opts:["Elected by the public","Appointed by judges","Senior police officers","Chosen by the Prime Minister"],answer:0,
+ why:"Police and Crime Commissioners are elected by the public to hold local police forces to account; the police themselves must obey the law.",
+ mnemonic:"'Public Chooses the Commissioner' — elected."},
+{topic:"Courts",q:"The court system in Northern Ireland is broadly similar to that of:",opts:["England and Wales","Scotland","The Republic of Ireland","France"],answer:0,
+ why:"Northern Ireland uses courts similar to England and Wales, including Magistrates' Courts, the Crown Court and County Courts.",
+ mnemonic:"NI courts mirror England & Wales."},
+{topic:"Courts",q:"In Scotland, minor civil disputes over small sums are dealt with by a 'simple procedure' in the:",opts:["Sheriff Court","Crown Court","Magistrates' Court","County Court"],answer:0,
+ why:"In Scotland, small civil claims are handled by the Sheriff Court using the 'simple procedure'.",
+ mnemonic:"Scotland's small claims → the Sheriff Court."}
 ];
 
 /* rest of the bank is appended below */
