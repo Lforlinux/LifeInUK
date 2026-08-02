@@ -1147,7 +1147,7 @@ function readinessAdvice(r){
 }
 
 /* ================= NAV ================= */
-function go(screen,arg){ paintHeader(); ({home:homeScreen,topics:topicsScreen,flashpick:flashPickScreen,stories:storyPickScreen,progress:progressScreen,badges:badgesScreen})[screen](arg); window.scrollTo(0,0);}
+function go(screen,arg){ paintHeader(); ({home:homeScreen,topics:topicsScreen,flashpick:flashPickScreen,stories:storyPickScreen,dates:datesScreen,progress:progressScreen,badges:badgesScreen})[screen](arg); window.scrollTo(0,0);}
 
 /* ================= HOME ================= */
 function homeScreen(){
@@ -1165,6 +1165,7 @@ function homeScreen(){
     <button class="mtile" onclick="go('topics')"><span class="ic">${SVG.history}</span><span><b>📚 Practice by Topic</b><span>Target your weak areas</span></span></button>
     <button class="mtile" onclick="go('flashpick')"><span class="ic">${SVG.values}</span><span><b>🧠 Mnemonic Flashcards</b><span>Memorise dates &amp; names fast</span></span></button>
     <button class="mtile" onclick="go('stories')"><span class="ic">${SVG.history}</span><span><b>📖 Story School</b><span>Remember lists via funny stories, then a quiz</span></span></button>
+    <button class="mtile" onclick="go('dates')"><span class="ic">${SVG.uk}</span><span><b>📅 Key Dates & Facts</b><span>Full timeline, oldest first + quick facts</span></span></button>
     <button class="mtile" onclick="startExam()"><span class="ic">${SVG.government}</span><span><b>🎓 Mock Exam</b><span>24 questions · 45 min · pass = 18</span></span></button>
     <button class="mtile" onclick="go('progress')"><span class="ic">${SVG.uk}</span><span><b>📊 Progress &amp; Readiness</b><span>Am I ready for the real test?</span></span></button>
     <button class="mtile" onclick="go('badges')"><span class="ic">${SVG.mascot}</span><span><b>🏆 Badges</b><span>${Object.keys(S.badges).length}/${BADGES.length} unlocked</span></span></button>
@@ -1631,7 +1632,7 @@ let story=null;
 function storyPickScreen(){
   app.innerHTML=`<div class="card"><h2>📖 Story School</h2>
    <p class="sub">Tricky lists become tiny funny stories. Read a set out loud, picture the scene, then hit 'Test me' to lock it in.</p>
-   <div class="chips">${STORIES.map((s,i)=>`<button class="chip" onclick="openStory(${i})"><span style="font-size:28px;width:40px;text-align:center">${s.emoji}</span><span>${s.title}<small>${esc(s.blurb)}</small></span></button>`).join('')}</div>
+   <div class="chips">${STORIES.map((s,i)=>s.hidden?'':`<button class="chip" onclick="openStory(${i})"><span style="font-size:28px;width:40px;text-align:center">${s.emoji}</span><span>${s.title}<small>${esc(s.blurb)}</small></span></button>`).join('')}</div>
    <div class="row"><button class="btn ghost small" onclick="go('home')">← Back</button></div></div>`;
 }
 function openStory(i){
@@ -1665,7 +1666,7 @@ function buildStoryQuiz(i){
   return shuffle(people.slice()).slice(0,10).map(it=>{
     const distract=shuffle(pool.filter(w=>w!==it.who)).slice(0,3);
     const opts=shuffle([it.who,...distract]);
-    return {q:`Who is credited with: ${it.what}?`, opts, answer:opts.indexOf(it.who), hook:`${it.who} → ${it.what}.`};
+    return {q:`${s.stem||"Who is credited with"}: ${it.what}?`, opts, answer:opts.indexOf(it.who), hook:`${it.who} → ${it.what}.`};
   });
 }
 function startStoryQuiz(i){ touchStreak(); story={set:i,items:buildStoryQuiz(i),idx:0,correct:0}; renderStoryQ(); }
@@ -1692,7 +1693,7 @@ function storyAnswer(k){
     </div>
     <div class="row">
       <button class="btn ${last?'green':'blue'}" onclick="${last?'finishStory()':'nextStoryQ()'}">${last?'See score →':'Next →'}</button>
-      <button class="btn ghost" onclick="openStory(${story.set})">Re-read story</button>
+      <button class="btn ghost" onclick="${STORIES[story.set].hidden?"go('dates')":`openStory(${story.set})`}">${STORIES[story.set].hidden?'Back to dates':'Re-read story'}</button>
     </div>`;
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
@@ -1705,10 +1706,140 @@ function finishStory(){
     <p class="sub">${pct>=80?"The story stuck!":pct>=50?"Getting there — re-read the hooks aloud.":"Re-read the story out loud, then try again."}</p>
     <div class="row" style="justify-content:center">
       <button class="btn" onclick="startStoryQuiz(${story.set})">Test again</button>
-      <button class="btn blue" onclick="openStory(${story.set})">Re-read story</button>
-      <button class="btn ghost" onclick="go('stories')">All stories</button>
+      <button class="btn blue" onclick="${STORIES[story.set].hidden?"go('dates')":`openStory(${story.set})`}">${STORIES[story.set].hidden?'Back to dates':'Re-read story'}</button>
+      <button class="btn ghost" onclick="${STORIES[story.set].hidden?"go('home')":"go('stories')"}">${STORIES[story.set].hidden?'Home':'All stories'}</button>
     </div></div>`;
 }
+
+/* ================= KEY DATES AREA ================= */
+const KEYDATES=[
+ {y:-6000,d:"6000 BC",m:"Britain becomes an island (cut off from mainland Europe)",h:"'6000 BC, Britain breaks free'",o:false},
+ {y:-55,d:"55 BC",m:"Julius Caesar's first Roman raid on Britain (failed)",h:"'Caesar came, saw, but didn't conquer'",o:false},
+ {y:43,d:"AD 43",m:"Romans conquer Britain under Emperor Claudius",h:"'Claudius at 43' — a Roman aged 43",o:false},
+ {y:122,d:"AD 122",m:"Hadrian's Wall begun, to keep out the Picts",h:"'Hadrian HAD a wall' up north",o:false},
+ {y:410,d:"AD 410",m:"The Romans leave Britain",h:"In at 43, out at 410 — the 4s book-end Rome",o:false},
+ {y:597,d:"AD 597",m:"St Augustine spreads Christianity in England",h:"'Augustine, 597 — heaven-sent'",o:false},
+ {y:789,d:"AD 789",m:"First Viking raids on Britain",h:"'Seven-eight-nine, Vikings on the brine'",o:true},
+ {y:1066,d:"1066",m:"Battle of Hastings — William of Normandy conquers England",h:"'Ten-sixty-six, William's in the mix'",o:true},
+ {y:1086,d:"1086",m:"Domesday Book — great survey of land & people",h:"'Doomsday list' — nothing escaped",o:false},
+ {y:1215,d:"1215",m:"Magna Carta — King John accepts limits on royal power",h:"'Twelve-fifteen, the king is reined in'",o:true},
+ {y:1284,d:"1284",m:"Statute of Rhuddlan — Edward I annexes Wales",h:"'Rhuddlan rules Wales' — Wales + England",o:true},
+ {y:1314,d:"1314",m:"Battle of Bannockburn — Robert the Bruce (Scots) beat the English",h:"'Bruce banned the English at Bannockburn'",o:true},
+ {y:1348,d:"1348",m:"The Black Death — plague kills about a third of the population",h:"'1348, a deadly fate'",o:false},
+ {y:1381,d:"1381",m:"The Peasants' Revolt (after the Black Death)",h:"After the plague, the peasants push back",o:false},
+ {y:1415,d:"1415",m:"Battle of Agincourt — English victory in France, won by Henry V",h:"'Henry the FIFTH, 1415' — longbows win",o:true},
+ {y:1455,d:"1455-1485",m:"Wars of the Roses — Lancaster (red) vs York (white)",h:"'Lancaster Loves Red, York Wears White'",o:false},
+ {y:1485,d:"1485",m:"Battle of Bosworth — Tudor dynasty begins (Henry VII)",h:"'Boss-worth' — the new BOSS takes the throne",o:true},
+ {y:1534,d:"1534",m:"Reformation — Henry VIII sets up the Church of England",h:"'No annulment, new establishment'",o:true},
+ {y:1536,d:"1536",m:"Wales formally united with England (under Henry VIII)",h:"Wales welded to England, 1530s",o:false},
+ {y:1588,d:"1588",m:"Spanish Armada defeated under Elizabeth I",h:"'Fifteen eighty-eight, Armada meets its fate'",o:true},
+ {y:1605,d:"1605",m:"The Gunpowder Plot (Guy Fawkes) fails",h:"'Remember, remember the 5th of November'",o:false},
+ {y:1611,d:"1611",m:"King James Bible — the English 'Authorised Version'",h:"'James's Bible, 1611'",o:true},
+ {y:1642,d:"1642",m:"English Civil War begins — Charles I vs Parliament",h:"'Roundheads vs Cavaliers'",o:true},
+ {y:1649,d:"1649",m:"King Charles I executed; England briefly a republic",h:"'Sixteen forty-nine, the King's off-line'",o:false},
+ {y:1660,d:"1660",m:"The Restoration — the monarchy returns (Charles II)",h:"'RE-store the king' — 1660",o:false},
+ {y:1666,d:"1666",m:"The Great Fire of London",h:"'Sixteen sixty-six, London's in a fix'",o:false},
+ {y:1679,d:"1679",m:"Habeas Corpus Act — no unlawful imprisonment",h:"'Have the body' in court — 1679",o:false},
+ {y:1688,d:"1688",m:"Glorious Revolution — William of Orange takes the throne",h:"'William oranges out James' — 1688",o:true},
+ {y:1689,d:"1689",m:"Bill of Rights — confirms Parliament's power over the Crown",h:"'1689, Parliament draws the line'",o:false},
+ {y:1707,d:"1707",m:"Act of Union — England + Scotland become Great Britain",h:"'Seventeen-oh-seven, England + Scotland'",o:true},
+ {y:1721,d:"1721",m:"Sir Robert Walpole becomes the first Prime Minister",h:"'Walpole first to hold the pole'",o:true},
+ {y:1746,d:"1746",m:"Battle of Culloden — Bonnie Prince Charlie & Jacobites beaten",h:"'Culloden closes the Jacobites'",o:true},
+ {y:1801,d:"1801",m:"Union with Ireland — the United Kingdom is formed",h:"'1801, Ireland joins the union'",o:false},
+ {y:1805,d:"1805",m:"Battle of Trafalgar — Nelson defeats the French/Spanish",h:"'1805, Nelson's Victory' (HMS Victory)",o:false},
+ {y:1807,d:"1807",m:"The slave trade abolished in the British Empire",h:"'1807, trade in chains ends'",o:false},
+ {y:1815,d:"1815",m:"Battle of Waterloo — Wellington beats Napoleon",h:"'Wellington BOOTS Napoleon out'",o:true},
+ {y:1832,d:"1832",m:"The (Great) Reform Act — greatly increased who could vote",h:"'1832 opens the vote'",o:false},
+ {y:1833,d:"1833",m:"Slavery abolished across the British Empire",h:"'1833, slavery set free'",o:false},
+ {y:1837,d:"1837-1901",m:"Reign of Queen Victoria (over 60 years)",h:"'Victoria = Victory over a long time'",o:true},
+ {y:1851,d:"1851",m:"The Great Exhibition — held in the Crystal Palace",h:"'Crystal Palace, 1851'",o:true},
+ {y:1853,d:"1853-1856",m:"Crimean War — Nightingale & Seacole nurse the wounded",h:"Crimean nurses — mid-1850s",o:false},
+ {y:1872,d:"1872",m:"First tennis club founded in the UK (Leamington Spa)",h:"'Tennis born 1872' in Leamington Spa",o:true},
+ {y:1899,d:"1899-1902",m:"The Boer War — fought in southern Africa",h:"'Boers, 1899-1902' — southern Africa",o:true},
+ {y:1914,d:"1914-1918",m:"First World War",h:"'14 to '18, ends 11/11 — poppies",o:true},
+ {y:1918,d:"1918",m:"Women over 30 get the right to vote",h:"'1918 opens the gate' (age 30)",o:false},
+ {y:1928,d:"1928",m:"Women get equal vote at 21; Fleming discovers penicillin",h:"'1928 makes it equal' (21) + Fleming's fungus",o:false},
+ {y:1936,d:"1936",m:"King Edward VIII abdicates to marry Wallis Simpson",h:"Edward chose love, gave up the crown",o:false},
+ {y:1939,d:"1939-1945",m:"Second World War",h:"'Thirty-nine to forty-five, allies survive'",o:true},
+ {y:1940,d:"1940",m:"Dunkirk evacuation & the Battle of Britain",h:"'1940 — little ships & the Few'",o:false},
+ {y:1942,d:"1942",m:"The Beveridge Report — blueprint for the welfare state",h:"'Beveridge's blueprint, 1942'",o:false},
+ {y:1944,d:"1944 (6 June)",m:"D-Day — Allied forces land in Normandy",h:"'D-Day, 6 June 1944'",o:true},
+ {y:1945,d:"1945",m:"WWII ends; Attlee government builds the welfare state",h:"'1945 — after the war, the welfare state'",o:false},
+ {y:1948,d:"1948",m:"NHS founded; Empire Windrush brings Caribbean workers",h:"'48 — NHS & Windrush'",o:false},
+ {y:1951,d:"1951",m:"The Festival of Britain",h:"'Festival of Britain, 1951'",o:false},
+ {y:1969,d:"1969",m:"Voting age lowered from 21 to 18",h:"'1969 -> vote at 18'",o:false},
+ {y:1973,d:"1973",m:"The UK joins the EEC (later the EU)",h:"'1973, into the EEC' (UK later left the EU, 2020)",o:true},
+ {y:1979,d:"1979",m:"Margaret Thatcher becomes first woman Prime Minister",h:"'Thatcher, the Iron Lady' — 1979",o:false},
+ {y:1981,d:"1981",m:"'Chariots of Fire' — famous British film",h:"'Chariots of Fire, 1981'",o:true},
+ {y:1982,d:"1982",m:"The Falklands War (UK vs Argentina)",h:"'Falklands, '82'",o:false},
+ {y:1994,d:"1994",m:"The Channel Tunnel opens (rail link to France)",h:"'Chunnel to France, 1994'",o:false},
+ {y:1998,d:"1998",m:"Good Friday Agreement — Northern Ireland peace",h:"'Good Friday, good peace' — 1998",o:false},
+ {y:1999,d:"1999",m:"Devolution — Scottish Parliament & Welsh Senedd begin",h:"'Powers roll out' to the nations, 1999",o:false},
+ {y:2007,d:"2007",m:"Forced Marriage (Civil Protection) Act",h:"'2007 — forced marriage outlawed'",o:true},
+ {y:2011,d:"2011",m:"Census: Christianity the largest religion (about 59%)",h:"'2011 census — 59% Christian'",o:true},
+ {y:2012,d:"2012",m:"London hosts the Olympic Games (its 3rd time)",h:"'London 2012' — the hat-trick Games",o:false}
+];
+const QUICKFACTS=[
+ {title:"Patron saints, days & emblems (remember D-P-G-A)",rows:[
+   ["St David — Wales — 1 March","Emblem: daffodil / leek. First of the year."],
+   ["St Patrick — N. Ireland — 17 March","Emblem: shamrock."],
+   ["St George — England — 23 April","Emblem: rose."],
+   ["St Andrew — Scotland — 30 November","Emblem: thistle. Last of the year."]
+ ]},
+ {title:"The Union Flag crosses (Wales is left off!)",rows:[
+   ["St George (England)","Red UPRIGHT cross on white (the plus sign)."],
+   ["St Andrew (Scotland)","White DIAGONAL cross on blue (the saltire)."],
+   ["St Patrick (Ireland)","Red DIAGONAL cross on white (the red X)."],
+   ["Wales","NOT on the flag — the red dragon instead."]
+ ]},
+ {title:"Government & law",rows:[
+   ["First past the post","Elects MPs to the UK Parliament (Westminster)."],
+   ["Proportional representation","Used for Scottish, Welsh & NI (devolved) elections."],
+   ["650 seats","House of Commons (MPs). The NI Assembly has 90 seats."],
+   ["Jury size","12 in England, Wales & N. Ireland; 15 in Scotland."],
+   ["Scotland — serious cases","Heard in the Sheriff Court / High Court of Justiciary."],
+   ["The Speaker","Keeps order in the House of Commons; politically neutral."]
+ ]},
+ {title:"People, places & culture",rows:[
+   ["Sir Christopher Wren","Architect of St Paul's Cathedral (after the 1666 fire)."],
+   ["William Wordsworth","Poet of the Lake District — 'Daffodils'."],
+   ["Robert Burns","Scotland's national poet — 'Auld Lang Syne'."],
+   ["Hogmanay","The Scottish celebration of New Year."],
+   ["Giant's Causeway","Famous landmark in Northern Ireland."]
+ ]}
+];
+STORIES.push({id:"allkeydates",hidden:true,title:"Key Dates",emoji:"📅",stem:"Which date",
+  groups:[{name:"All the key dates",intro:"Every date, oldest first.",hook:"Old first, new last",
+           items:KEYDATES.map(x=>({who:x.d,what:x.m,note:x.h})),
+           picture:"Run the whole timeline from 6000 BC to 2012 in your head like a film reel."}]});
+function eraOf(y){ if(y<=597)return"Prehistory & Roman Britain"; if(y<1500)return"The Middle Ages"; if(y<1700)return"Tudors & Stuarts"; if(y<1900)return"Georgians & Victorians"; return"The 20th–21st Century"; }
+function datesScreen(){
+  const eras=["Prehistory & Roman Britain","The Middle Ages","Tudors & Stuarts","Georgians & Victorians","The 20th–21st Century"];
+  const rows=KEYDATES.slice().sort((a,b)=>a.y-b.y);
+  let html=`<div class="card"><h2>📅 Key Dates & Facts</h2>
+    <p class="sub">Every key date, oldest first — <b>date · matter · how to remember</b>. ★ = from your own notes. (Tidied: Armada 1588, Walpole 1721.)</p>
+    <div class="row" style="margin-top:0"><button class="btn green small" onclick="startDatesQuiz()">Test me on dates →</button></div></div>`;
+  eras.forEach(er=>{
+    const list=rows.filter(x=>eraOf(x.y)===er);
+    if(!list.length)return;
+    html+=`<div class="card"><h3 style="margin:0 0 6px">${er}</h3>`;
+    list.forEach(x=>{
+      html+=`<div style="display:flex;gap:12px;margin:11px 0;align-items:flex-start">
+        <span class="pill" style="min-width:86px;text-align:center;flex:0 0 auto">${x.o?'★ ':''}${esc(x.d)}</span>
+        <div><div style="font-weight:700">${esc(x.m)}</div><div style="color:var(--brand);font-size:13px;margin-top:2px">🧠 ${esc(x.h)}</div></div>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  QUICKFACTS.forEach(f=>{
+    html+=`<div class="card"><h3 style="margin:0 0 8px">${esc(f.title)}</h3>`;
+    f.rows.forEach(r=>{ html+=`<div style="display:flex;gap:10px;margin:8px 0;align-items:flex-start"><span style="flex:0 0 44%;font-weight:700">${esc(r[0])}</span><span style="flex:1;color:var(--muted)">${esc(r[1])}</span></div>`; });
+    html+=`</div>`;
+  });
+  html+=`<div class="card" style="text-align:center"><div class="row" style="justify-content:center"><button class="btn blue" onclick="startDatesQuiz()">Test me on dates</button><button class="btn ghost" onclick="go('home')">Home</button></div></div>`;
+  app.innerHTML=html; window.scrollTo(0,0);
+}
+function startDatesQuiz(){ const i=STORIES.findIndex(s=>s.id==="allkeydates"); startStoryQuiz(i); }
 
 /* ================= BOOT ================= */
 window.startPractice=startPractice;window.startFlash=startFlash;window.startExam=startExam;
@@ -1716,6 +1847,7 @@ window.answer=answer;window.nextQ=nextQ;window.finishPractice=finishPractice;win
 window.flashFlip=flashFlip;window.flashNext=flashNext;window.pick=pick;window.examNav=examNav;window.gradeExam=gradeExam;
 window.go=go;window.resetAll=resetAll;
 window.openStory=openStory;window.startStoryQuiz=startStoryQuiz;window.storyAnswer=storyAnswer;window.nextStoryQ=nextStoryQ;window.finishStory=finishStory;
+window.datesScreen=datesScreen;window.startDatesQuiz=startDatesQuiz;
 paintHeader(); go('home');
 </script>
 </body>
